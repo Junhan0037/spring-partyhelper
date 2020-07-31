@@ -74,6 +74,7 @@ public class AccountService implements UserDetailsService {
         if (account == null) {
             account = accountRepository.findByNickname(emailOrNickname);
         }
+        httpSession.setAttribute("account", account);
 
         if (account == null) {
             throw new UsernameNotFoundException (emailOrNickname);
