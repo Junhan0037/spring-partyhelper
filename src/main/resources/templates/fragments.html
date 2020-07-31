@@ -138,27 +138,28 @@
                     <i class="fa fa-plus" aria-hidden="true"></i> 스터디 개설
                 </a>
             </li>
-<!--            <li class="nav-item dropdown" sec:authorize="isAuthenticated()">-->
-<!--                <a class="nav-link dropdown-toggle" href="#" id="userDropdown" role="button" data-toggle="dropdown"-->
-<!--                   aria-haspopup="true" aria-expanded="false">-->
-<!--                    <svg th:if="${#strings.isEmpty(account?.profileImage)}" th:data-jdenticon-value="${#authentication.name}"-->
-<!--                         width="24" height="24" class="rounded border bg-light"></svg>-->
-<!--                    <img th:if="${!#strings.isEmpty(account?.profileImage)}" th:src="${account?.profileImage}"-->
-<!--                         width="24" height="24" class="rounded border"/>-->
-<!--                </a>-->
-<!--                <div class="dropdown-menu dropdown-menu-sm-right" aria-labelledby="userDropdown">-->
-<!--                    <h6 class="dropdown-header">-->
+            <li class="nav-item dropdown" sec:authorize="isAuthenticated()">
+                <a class="nav-link dropdown-toggle" href="#" id="userDropdown" role="button" data-toggle="dropdown"
+                   aria-haspopup="true" aria-expanded="false">
+                    <svg th:if="${#strings.isEmpty(account?.profileImage)}" th:data-jdenticon-value="${#authentication.name}"
+                         width="24" height="24" class="rounded border bg-light"></svg>
+                    <img th:if="${!#strings.isEmpty(account?.profileImage)}" th:src="${account?.profileImage}"
+                         width="24" height="24" class="rounded border"/>
+                </a>
+                <div class="dropdown-menu dropdown-menu-sm-right" aria-labelledby="userDropdown">
+                    <h6 class="dropdown-header">
 <!--                        <span sec:authentication="name">Username</span>-->
-<!--                    </h6>-->
-<!--                    <a class="dropdown-item" th:href="@{'/profile/' + ${#authentication.name}}">프로필</a>-->
-<!--                    <a class="dropdown-item" >스터디</a>-->
-<!--                    <div class="dropdown-divider"></div>-->
-<!--                    <a class="dropdown-item" href="#" th:href="@{'/settings/profile'}">설정</a>-->
-<!--                    <form class="form-inline my-2 my-lg-0" action="#" th:action="@{/logout}" method="post">-->
-<!--                        <button class="dropdown-item" type="submit">로그아웃</button>-->
-<!--                    </form>-->
-<!--                </div>-->
-<!--            </li>-->
+                        <span th:text="${session.account.getEmail()}"></span>
+                    </h6>
+                    <a class="dropdown-item" th:href="@{'/profile/' + ${#authentication.name}}">프로필</a>
+                    <a class="dropdown-item" >스터디</a>
+                    <div class="dropdown-divider"></div>
+                    <a class="dropdown-item" href="#" th:href="@{'/settings/profile'}">설정</a>
+                    <form class="form-inline my-2 my-lg-0" action="#" th:action="@{/logout}" method="post">
+                        <button class="dropdown-item" type="submit">로그아웃</button>
+                    </form>
+                </div>
+            </li>
         </ul>
     </div>
 </nav>

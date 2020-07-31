@@ -29,10 +29,14 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                     .antMatchers(HttpMethod.GET, "/profile/*").permitAll()
                     .anyRequest().authenticated() // anyRequest() : 설정한 값들 이외 나머지 URL. => 나머지 URL들은 모두 인증과정을 거친다
                 .and()
+                    .formLogin()
+                        .loginPage("/login").permitAll()
+                .and()
                     .logout()
                         .logoutSuccessUrl("/") // 로그아웃 성공 시 "/" 주소로 이동
                 .and()
                     .oauth2Login() // OAuth2 로그인 기능에 대한 여러 설정의 진입점
+                        .loginPage("/oauth")
                         .userInfoEndpoint() // OAuth2 로그인 성공 이후 사용자 정보를 가져올 때의 설정들 담당
                             .userService(customOAuth2UserService); // userService() : 소셜 로그인 성공 시 후속 조치를 진행할 구현체 등록
     }

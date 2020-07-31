@@ -1,5 +1,6 @@
 package com.partyhelper.modules.account;
 
+import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -10,6 +11,8 @@ import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.transaction.annotation.Transactional;
+
+import javax.servlet.http.HttpSession;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
@@ -26,8 +29,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @AutoConfigureMockMvc
 class AccountControllerTest {
 
-    @Autowired
-    private MockMvc mockMvc;
+    @Autowired private MockMvc mockMvc;
     @Autowired private AccountRepository accountRepository;
     @MockBean JavaMailSender javaMailSender;
 
@@ -110,5 +112,14 @@ class AccountControllerTest {
                 .andExpect(view().name("account/checked-email"))
                 .andExpect(authenticated().withUsername("junhan"));
     }
+
+//    @DisplayName("이메일 재전송 화면 확인")
+//    @Test
+//    void checkEmailForm() throws Exception {
+//        mockMvc.perform(get("/check-email"))
+//                .andExpect(status().isOk())
+//                .andExpect(view().name("account/check-email"))
+//                .andExpect(model().attributeExists("email"));
+//    }
 
 }
