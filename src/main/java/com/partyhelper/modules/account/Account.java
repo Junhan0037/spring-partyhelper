@@ -78,6 +78,7 @@ public class Account extends BaseTimeEntity {
 
     public void generateEmailCheckToken() { // 이메일 인증 토큰 생성
         this.emailCheckToken = UUID.randomUUID().toString();
+        this.emailCheckTokenGeneratedAt = LocalDateTime.now();
     }
 
     public void completeSignUp() {
@@ -86,6 +87,10 @@ public class Account extends BaseTimeEntity {
 
     public boolean isValidToken(String token) {
         return this.emailCheckToken.equals(token);
+    }
+
+    public boolean canSendConfirmEmail() {
+        return this.emailCheckTokenGeneratedAt.isBefore(LocalDateTime.now().minusHours(1)); // 이메일을 전송한지 한시간이 지났는지 확인
     }
 
 }

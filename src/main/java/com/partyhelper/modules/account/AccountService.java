@@ -47,7 +47,7 @@ public class AccountService {
         return accountRepository.save(account);
     }
 
-    private void sendSignUpConfirmEmail(Account newAccount) {
+    public void sendSignUpConfirmEmail(Account newAccount) {
         SimpleMailMessage mailMessage = new SimpleMailMessage(); // 회원 인증 메일 보내기
         mailMessage.setTo(newAccount.getEmail());
         mailMessage.setSubject("PartyHelper, 회원 가입 인증");

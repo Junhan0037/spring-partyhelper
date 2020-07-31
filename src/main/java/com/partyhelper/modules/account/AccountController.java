@@ -1,5 +1,6 @@
 package com.partyhelper.modules.account;
 
+import com.partyhelper.modules.account.annotation.CurrentAccount;
 import com.partyhelper.modules.account.form.SignUpForm;
 import com.partyhelper.modules.account.validator.SignUpFormValidator;
 import lombok.RequiredArgsConstructor;
@@ -41,9 +42,9 @@ public class AccountController {
         if(errors.hasErrors()) {
             return "account/sign-up";
         }
+
         Account account = accountService.processNewAccount(signUpForm);
         accountService.login(account);
-
         return "redirect:/";
     }
 
@@ -67,6 +68,25 @@ public class AccountController {
         model.addAttribute("numberOfUser", accountRepository.count());
         model.addAttribute("nickname", account.getNickname());
         return view;
+    }
+
+    @GetMapping("/check-email")
+    public String checkEmail(@CurrentAccount Account account, Model model) {
+        model.addAttribute(account);
+        model.addAttribute("email", account.getEmail());
+        return "account/check-email";
+    }
+
+    @GetMapping("/resend-confirm-email")
+    public String resendConfirmEmail(@CurrentAccount Account account, Model model) {
+        if (!account.canSendConfirmEmail()) {
+            model.addAttribute("error", "인증 이메일은 1시간에 한번만 전송할 수 있습니다.");
+            model.addAttribute("email", account.getEmail());
+            return "account/check-email";
+        }
+
+        accountService.sendSignUpConfirmEmail(account);
+        return "redirect:/";
     }
 
 }
