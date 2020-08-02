@@ -9,10 +9,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.Errors;
 import org.springframework.web.bind.WebDataBinder;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.InitBinder;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 import java.util.Optional;
@@ -86,6 +83,18 @@ public class AccountController {
 
         accountService.sendSignUpConfirmEmail(account);
         return "redirect:/";
+    }
+
+    @GetMapping("/profile/{email}")
+    public String viewProfile(@CurrentAccount Account account, @PathVariable String email, Model model) {
+        Account byEmail = accountRepository.findByEmail(email);
+        if (byEmail == null) {
+            throw new IllegalArgumentException(email + "에 해당하는 사용자가 없습니다.");
+        }
+
+        model.addAttribute(byEmail);
+        model.addAttribute("isOwner", byEmail.equals(account));
+        return "account/profile";
     }
 
 }

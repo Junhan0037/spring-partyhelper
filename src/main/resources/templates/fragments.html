@@ -151,7 +151,8 @@
 <!--                        <span sec:authentication="name">Username</span>-->
                         <span th:text="${session.account.getEmail()}"></span>
                     </h6>
-                    <a class="dropdown-item" th:href="@{'/profile/' + ${#authentication.name}}">프로필</a>
+<!--                    <a class="dropdown-item" th:href="@{'/profile/' + ${#authentication.name}}">프로필</a>-->
+                    <a class="dropdown-item" th:href="@{'/profile/' + ${session.account.getEmail()}}">프로필</a>
                     <a class="dropdown-item" >스터디</a>
                     <div class="dropdown-divider"></div>
                     <a class="dropdown-item" href="#" th:href="@{'/settings/profile'}">설정</a>
