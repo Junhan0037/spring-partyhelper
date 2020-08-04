@@ -3,15 +3,15 @@ package com.partyhelper.modules.settings;
 import com.partyhelper.modules.account.Account;
 import com.partyhelper.modules.account.AccountService;
 import com.partyhelper.modules.account.annotation.CurrentAccount;
+import com.partyhelper.modules.settings.form.PasswordForm;
 import com.partyhelper.modules.settings.form.Profile;
+import com.partyhelper.modules.settings.validator.PasswordFormValidator;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.internal.Errors;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.WebDataBinder;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import javax.validation.Valid;
@@ -34,6 +34,11 @@ public class SettingsController {
 
     private final AccountService accountService;
 
+    @InitBinder("passwordForm") // passwordForm이 불러지면 PasswordFormValidator()에서 검증한다.
+    public void initBinder(WebDataBinder webDataBinder) {
+        webDataBinder.addValidators(new PasswordFormValidator()); // 커스텀 검증
+    }
+
     @GetMapping(PROFILE)
     public String updateProfileForm(@CurrentAccount Account account, Model model) {
         model.addAttribute(account);
@@ -52,6 +57,27 @@ public class SettingsController {
         accountService.updateProfile(account, profile);
         attributes.addFlashAttribute("message", "프로필을 수정했습니다.");
         return "redirect:/" + SETTINGS + PROFILE;
+    }
+
+    @GetMapping(PASSWORD)
+    public String updatePasswordForm(@CurrentAccount Account account, Model model) {
+        model.addAttribute(account);
+        model.addAttribute(new PasswordForm());
+
+        return SETTINGS + PASSWORD;
+    }
+
+    @PostMapping(PASSWORD)
+    public String updatePassword(@CurrentAccount Account account, @Valid @ModelAttribute PasswordForm passwordForm, Errors errors,
+                                 Model model, RedirectAttributes attributes) {
+        if (errors.hasErrors()) {
+            model.addAttribute(account);
+            return SETTINGS + PASSWORD;
+        }
+
+        accountService.updatePassword(account, passwordForm.getNewPassword());
+        attributes.addFlashAttribute("message", "패스워드를 변경했습니다.");
+        return "redirect:/" + SETTINGS + PASSWORD;
     }
 
 }
