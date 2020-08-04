@@ -94,11 +94,6 @@ public class AccountService implements UserDetailsService {
     }
 
     public void updateProfile(Account account, Profile profile) {
-//        account.setUrl(profile.getUrl());
-//        account.setOccupation(profile.getOccupation());
-//        account.setLocation(profile.getLocation());
-//        account.setBio(profile.getBio());
-//        account.setProfileImage(profile.getProfileImage());
         modelMapper.map(profile, account); // account.set∼(profile.get∼());을 해준다
         accountRepository.save(account); // 영속성 컨텍스트
     }
@@ -111,6 +106,12 @@ public class AccountService implements UserDetailsService {
     public void updateNotifications(Account account, Notifications notifications) { // 알림 수정
         modelMapper.map(notifications, account);
         accountRepository.save(account);
+    }
+
+    public void updateNickname(Account account, String nickname) { // 닉네임 수정
+        account.setNickname(nickname);
+        accountRepository.save(account);
+        login(account);
     }
 
 }

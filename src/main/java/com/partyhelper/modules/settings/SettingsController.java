@@ -3,9 +3,11 @@ package com.partyhelper.modules.settings;
 import com.partyhelper.modules.account.Account;
 import com.partyhelper.modules.account.AccountService;
 import com.partyhelper.modules.account.annotation.CurrentAccount;
+import com.partyhelper.modules.settings.form.NicknameForm;
 import com.partyhelper.modules.settings.form.Notifications;
 import com.partyhelper.modules.settings.form.PasswordForm;
 import com.partyhelper.modules.settings.form.Profile;
+import com.partyhelper.modules.settings.validator.NicknameValidator;
 import com.partyhelper.modules.settings.validator.PasswordFormValidator;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
@@ -36,10 +38,16 @@ public class SettingsController {
 
     private final AccountService accountService;
     private final ModelMapper modelMapper;
+    private final NicknameValidator nicknameValidator;
 
     @InitBinder("passwordForm") // passwordForm이 불러지면 PasswordFormValidator()에서 검증한다.
     public void initBinder(WebDataBinder webDataBinder) {
         webDataBinder.addValidators(new PasswordFormValidator()); // 커스텀 검증
+    }
+
+    @InitBinder("nicknameForm")
+    public void nicknameFormInitBinder(WebDataBinder webDataBinder) {
+        webDataBinder.addValidators(nicknameValidator);
     }
 
     @GetMapping(PROFILE)
@@ -101,6 +109,26 @@ public class SettingsController {
         accountService.updateNotifications(account, notifications);
         attributes.addFlashAttribute("message", "알림 설정을 변경했습니다.");
         return "redirect:/" + SETTINGS + NOTIFICATIONS;
+    }
+
+    @GetMapping(ACCOUNT)
+    public String updateAccountForm(@CurrentAccount Account account, Model model) {
+        model.addAttribute(account);
+        model.addAttribute(modelMapper.map(account, NicknameForm.class));
+        return SETTINGS + ACCOUNT;
+    }
+
+    @PostMapping(ACCOUNT)
+    public String updateAccount(@CurrentAccount Account account, @Valid @ModelAttribute NicknameForm nicknameForm, Errors errors,
+                                Model model, RedirectAttributes attributes) {
+        if (errors.hasErrors()) {
+            model.addAttribute(account);
+            return SETTINGS + ACCOUNT;
+        }
+
+        accountService.updateNickname(account, nicknameForm.getNickname());
+        attributes.addFlashAttribute("message", "닉네임을 수정했습니다.");
+        return "redirect:/" + SETTINGS + ACCOUNT;
     }
 
 }
