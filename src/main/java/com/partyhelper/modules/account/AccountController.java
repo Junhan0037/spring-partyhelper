@@ -11,6 +11,7 @@ import org.springframework.validation.Errors;
 import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.HttpSession;
 import javax.validation.Valid;
 import java.util.Optional;
 
@@ -22,6 +23,7 @@ public class AccountController {
     private final AccountRepository accountRepository;
     private final JavaMailSender javaMailSender;
     private final AccountService accountService;
+    private final HttpSession httpSession;
 
     @InitBinder("signUpForm")
     public void initBinder(WebDataBinder webDataBinder) {
@@ -92,7 +94,8 @@ public class AccountController {
         }
 
         model.addAttribute(byEmail);
-        model.addAttribute("isOwner", byEmail.equals(account));
+//        model.addAttribute("isOwner", byEmail.equals(account));
+        model.addAttribute("isOwner", byEmail.getEmail().equals(account.getEmail()));
         return "account/profile";
     }
 

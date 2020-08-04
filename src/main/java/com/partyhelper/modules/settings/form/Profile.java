@@ -1,9 +1,11 @@
-package com.partyhelper.modules.account.form;
+package com.partyhelper.modules.settings.form;
 
 import com.partyhelper.modules.account.Account;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 @Data
+@NoArgsConstructor
 public class Profile {
 
     private String bio;
