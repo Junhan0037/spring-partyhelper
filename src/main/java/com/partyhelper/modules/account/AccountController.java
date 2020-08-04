@@ -60,8 +60,7 @@ public class AccountController {
             return view;
         }
 
-        account.completeSignUp(); // 이메일 인증 상태 변환
-        accountService.login(account);
+        accountService.completeSignUp(account);
         model.addAttribute("numberOfUser", accountRepository.count());
         model.addAttribute("nickname", account.getNickname());
         return view;
