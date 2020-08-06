@@ -114,4 +114,13 @@ public class AccountService implements UserDetailsService {
         login(account);
     }
 
+    public void sendLoginLink(Account account) { // 비밀번호 없이 메일 인증 보내기
+        account.generateEmailCheckToken();
+        SimpleMailMessage mailMessage = new SimpleMailMessage();
+        mailMessage.setTo(account.getEmail());
+        mailMessage.setSubject("스터디올래, 로그인 링크");
+        mailMessage.setText("/login-by-email?token=" + account.getEmailCheckToken() + "&email=" + account.getEmail());
+        javaMailSender.send(mailMessage);
+    }
+
 }
