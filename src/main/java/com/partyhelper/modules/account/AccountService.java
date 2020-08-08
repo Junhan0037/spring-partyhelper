@@ -40,21 +40,14 @@ public class AccountService implements UserDetailsService {
 
     public Account processNewAccount(SignUpForm signUpForm) {
         Account newAccount = saveNewAccount(signUpForm); // 폼의 내용으로 회원 가입
-        newAccount.generateEmailCheckToken(); // 이메일 확인하는 토큰 생성
         sendSignUpConfirmEmail(newAccount); // 가입 확인 이메일 보내기
         return newAccount;
     }
 
     private Account saveNewAccount(@ModelAttribute @Valid SignUpForm signUpForm) {
-        Account account = Account.builder()
-                .nickname(signUpForm.getNickname())
-                .email(signUpForm.getEmail())
-                .password(passwordEncoder.encode(signUpForm.getPassword()))
-                .role(Role.USER)
-                .studyCreatedByWeb(true)
-                .studyEnrollmentResultByWeb(true)
-                .studyUpdatedByWeb(true)
-                .build();
+        signUpForm.setPassword(passwordEncoder.encode(signUpForm.getPassword()));
+        Account account = modelMapper.map(signUpForm, Account.class);
+        account.generateEmailCheckToken(); // 이메일 확인 토큰 생성
         return accountRepository.save(account);
     }
 
