@@ -1,6 +1,6 @@
 package com.partyhelper.modules.account.oauth;
 
-import com.partyhelper.modules.account.Account;
+import com.partyhelper.modules.account.domain.Account;
 import com.partyhelper.modules.account.Role;
 import lombok.AllArgsConstructor;
 import lombok.Builder;

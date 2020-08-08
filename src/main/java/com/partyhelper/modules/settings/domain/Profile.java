@@ -1,6 +1,5 @@
-package com.partyhelper.modules.settings.form;
+package com.partyhelper.modules.settings.domain;
 
-import com.partyhelper.modules.account.Account;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.hibernate.validator.constraints.Length;

@@ -30,7 +30,16 @@
     <div th:replace="fragments.html :: footer"></div>
 </div>
 <script src="/node_modules/@yaireo/tagify/dist/tagify.min.js"></script>
-<script type="application/javascript">
+<script type="application/javascript" th:inline="javascript">
+    $(function() {
+        var csrfToken = /*[[${_csrf.token}]]*/ null;
+        var csrfHeader = /*[[${_csrf.headerName}]]*/ null;
+        $(document).ajaxSend(function (e, xhr, options) {
+            xhr.setRequestHeader(csrfHeader, csrfToken);
+        });
+    });
+</script>
+<script type="application/javascript" th:inline="javascript">
     $(function() {
         function tagRequest(url, tagTitle) {
             $.ajax({
@@ -50,10 +59,12 @@
 
         function onAdd(e) {
             tagRequest("/add", e.detail.data.value);
+            // tagRequest("/settings/tags/add", e.detail.data.value);
         }
 
         function onRemove(e) {
             tagRequest("/remove", e.detail.data.value);
+            // tagRequest("/settings/tags/remove", e.detail.data.value);
         }
 
         var tagInput = document.querySelector("#tags");

@@ -1,10 +1,10 @@
 package com.partyhelper.modules.account;
 
 import com.partyhelper.modules.account.annotation.CurrentAccount;
+import com.partyhelper.modules.account.domain.Account;
 import com.partyhelper.modules.account.form.SignUpForm;
 import com.partyhelper.modules.account.validator.SignUpFormValidator;
 import lombok.RequiredArgsConstructor;
-import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.Errors;
@@ -12,9 +12,7 @@ import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
-import javax.servlet.http.HttpSession;
 import javax.validation.Valid;
-import java.util.Optional;
 
 @Controller
 @RequiredArgsConstructor

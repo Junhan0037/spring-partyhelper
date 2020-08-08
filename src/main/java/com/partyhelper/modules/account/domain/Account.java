@@ -1,7 +1,8 @@
-package com.partyhelper.modules.account;
+package com.partyhelper.modules.account.domain;
 
+import com.partyhelper.modules.account.Role;
 import com.partyhelper.modules.main.BaseTimeEntity;
-import com.partyhelper.modules.settings.form.Tag;
+import com.partyhelper.modules.settings.domain.Tag;
 import lombok.*;
 
 import javax.persistence.*;

@@ -1,6 +1,6 @@
 package com.partyhelper.modules.account.etc;
 
-import com.partyhelper.modules.account.Account;
+import com.partyhelper.modules.account.domain.Account;
 import lombok.Getter;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.User;

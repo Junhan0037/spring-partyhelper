@@ -1,8 +1,6 @@
-package com.partyhelper.modules.settings.form;
+package com.partyhelper.modules.settings.domain;
 
-import com.partyhelper.modules.account.Account;
 import lombok.Data;
-import lombok.NoArgsConstructor;
 
 @Data
 public class Notifications {

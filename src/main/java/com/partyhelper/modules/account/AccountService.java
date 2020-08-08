@@ -1,9 +1,11 @@
 package com.partyhelper.modules.account;
 
+import com.partyhelper.modules.account.domain.Account;
 import com.partyhelper.modules.account.etc.UserAccount;
-import com.partyhelper.modules.settings.form.Notifications;
-import com.partyhelper.modules.settings.form.Profile;
+import com.partyhelper.modules.settings.domain.Notifications;
+import com.partyhelper.modules.settings.domain.Profile;
 import com.partyhelper.modules.account.form.SignUpForm;
+import com.partyhelper.modules.settings.domain.Tag;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
 import org.springframework.mail.SimpleMailMessage;
@@ -22,6 +24,7 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import javax.servlet.http.HttpSession;
 import javax.validation.Valid;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 @Transactional
@@ -121,6 +124,11 @@ public class AccountService implements UserDetailsService {
         mailMessage.setSubject("스터디올래, 로그인 링크");
         mailMessage.setText("/login-by-email?token=" + account.getEmailCheckToken() + "&email=" + account.getEmail());
         javaMailSender.send(mailMessage);
+    }
+
+    public void addTag(Account account, Tag tag) {
+        Optional<Account> byId = accountRepository.findById(account.getId());
+        byId.ifPresent(a -> a.getTags().add(tag));
     }
 
 }

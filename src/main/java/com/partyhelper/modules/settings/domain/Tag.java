@@ -1,4 +1,4 @@
-package com.partyhelper.modules.settings.form;
+package com.partyhelper.modules.settings.domain;
 
 import lombok.*;
 

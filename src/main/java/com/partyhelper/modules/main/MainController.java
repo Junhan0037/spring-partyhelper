@@ -1,6 +1,6 @@
 package com.partyhelper.modules.main;
 
-import com.partyhelper.modules.account.Account;
+import com.partyhelper.modules.account.domain.Account;
 import com.partyhelper.modules.account.annotation.CurrentAccount;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;

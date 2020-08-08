@@ -1,6 +1,6 @@
 package com.partyhelper.modules.settings.validator;
 
-import com.partyhelper.modules.account.Account;
+import com.partyhelper.modules.account.domain.Account;
 import com.partyhelper.modules.account.AccountRepository;
 import com.partyhelper.modules.settings.form.NicknameForm;
 import lombok.RequiredArgsConstructor;

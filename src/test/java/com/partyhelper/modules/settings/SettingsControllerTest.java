@@ -1,7 +1,7 @@
 package com.partyhelper.modules.settings;
 
 import com.partyhelper.WithAccount;
-import com.partyhelper.modules.account.Account;
+import com.partyhelper.modules.account.domain.Account;
 import com.partyhelper.modules.account.AccountRepository;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
