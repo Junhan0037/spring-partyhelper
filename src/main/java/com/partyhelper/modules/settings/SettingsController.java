@@ -23,6 +23,9 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import javax.validation.Valid;
 
+import java.util.Set;
+import java.util.stream.Collectors;
+
 import static com.partyhelper.modules.settings.SettingsController.*;
 
 @Controller
@@ -138,10 +141,12 @@ public class SettingsController {
     @GetMapping(TAGS)
     public String updateTags(@CurrentAccount Account account, Model model) {
         model.addAttribute(account);
+        Set<Tag> tags = accountService.getTags(account); // 현재 유저가 관심있는 태그 목록
+        model.addAttribute("tags", tags.stream().map(Tag::getTitle).collect(Collectors.toList())); // 태그 목록을 List형태로 변환
         return SETTINGS + TAGS;
     }
 
-    @PostMapping(TAGS)
+    @PostMapping(TAGS + "/add")
     @ResponseBody
     public ResponseEntity addTag(@CurrentAccount Account account, @RequestBody TagForm tagForm) {
         String title = tagForm.getTagTitle();

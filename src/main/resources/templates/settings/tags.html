@@ -20,9 +20,8 @@
                         또는 엔터를 입력하세요.
                     </div>
 <!--                    <div id="whitelist" th:text="${whitelist}" hidden></div>-->
-<!--                    <input id="tags" type="text" name="tags" th:value="${#strings.listJoin(tags, ',')}"-->
-<!--                           class="tagify-outside" aria-describedby="tagHelp"/>-->
-                    <input id="tags" type="text" name="tags" class="tagify-outside" aria-describedby="tagHelp" />
+                    <input id="tags" type="text" name="tags" th:value="${#strings.listJoin(tags, ',')}"
+                           class="tagify-outside" aria-describedby="tagHelp"/>
                 </div>
             </div>
         </div>
@@ -58,13 +57,13 @@
         }
 
         function onAdd(e) {
-            tagRequest("/add", e.detail.data.value);
-            // tagRequest("/settings/tags/add", e.detail.data.value);
+            // tagRequest("/add", e.detail.data.value);
+            tagRequest("/settings/tags/add", e.detail.data.value);
         }
 
         function onRemove(e) {
-            tagRequest("/remove", e.detail.data.value);
-            // tagRequest("/settings/tags/remove", e.detail.data.value);
+            // tagRequest("/remove", e.detail.data.value);
+            tagRequest("/settings/tags/remove", e.detail.data.value);
         }
 
         var tagInput = document.querySelector("#tags");
