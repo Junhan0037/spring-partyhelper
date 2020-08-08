@@ -131,4 +131,10 @@ public class SettingsController {
         return "redirect:/" + SETTINGS + ACCOUNT;
     }
 
+    @GetMapping(TAGS)
+    public String updateTags(@CurrentAccount Account account, Model model) {
+        model.addAttribute(account);
+        return SETTINGS + TAGS;
+    }
+
 }
