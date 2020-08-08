@@ -4,16 +4,21 @@ import com.partyhelper.WithAccount;
 import com.partyhelper.modules.account.Account;
 import com.partyhelper.modules.account.AccountRepository;
 import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.test.web.servlet.setup.MockMvcBuilders;
+import org.springframework.web.context.WebApplicationContext;
 
 import static com.partyhelper.modules.settings.SettingsController.*;
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf;
+import static org.springframework.security.test.web.servlet.setup.SecurityMockMvcConfigurers.springSecurity;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 
@@ -27,17 +32,27 @@ class SettingsControllerTest {
     @Autowired MockMvc mockMvc;
     @Autowired AccountRepository accountRepository;
     @Autowired PasswordEncoder passwordEncoder;
+    @Autowired WebApplicationContext context;
+
+    @BeforeEach
+    public void setup() {
+        mockMvc = MockMvcBuilders
+                .webAppContextSetup(context)
+                .apply(springSecurity())
+                .build();
+    }
 
     @AfterEach
     void afterEach() {
         accountRepository.deleteAll();
     }
 
-    @WithAccount("junhan")
     @DisplayName("프로필 수정 폼")
+    @WithMockUser(roles = "OAUTH")
+//    @WithAccount("junhan")
     @Test
     void updateProfileForm() throws Exception {
-        mockMvc.perform(get(ROOT + SETTINGS + PROFILE))
+        mockMvc.perform(get(ROOT + SETTINGS + PROFILE).with(csrf()))
                 .andExpect(status().isOk())
                 .andExpect(model().attributeExists("account"))
                 .andExpect(model().attributeExists("profile"));
