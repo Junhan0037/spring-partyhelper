@@ -1,5 +1,7 @@
 package com.partyhelper.modules.account;
 
+import com.partyhelper.infra.mail.EmailMessage;
+import com.partyhelper.infra.mail.EmailService;
 import com.partyhelper.modules.account.domain.Account;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -7,8 +9,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
-import org.springframework.mail.SimpleMailMessage;
-import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -29,7 +29,7 @@ class AccountControllerTest {
 
     @Autowired private MockMvc mockMvc;
     @Autowired private AccountRepository accountRepository;
-    @MockBean JavaMailSender javaMailSender;
+    @MockBean EmailService emailService;
 
     @DisplayName("회원 가입 화면 확인")
     @Test
@@ -70,7 +70,7 @@ class AccountControllerTest {
         assertNotNull(account);
         assertNotEquals(account.getPassword(), "12345678"); // 인코딩 되어 같은 값이 나오지 않는다
         assertNotNull(account.getEmailCheckToken());
-        then(javaMailSender).should().send(any(SimpleMailMessage.class)); // send가 호출이 되었는지 확인
+        then(emailService).should().sendEmail(any(EmailMessage.class)); // send가 호출이 되었는지 확인
     }
 
     @DisplayName("인증 메일 확인 - 입력값 오류")
