@@ -3,6 +3,7 @@ package com.partyhelper.modules.account.domain;
 import com.partyhelper.modules.account.Role;
 import com.partyhelper.modules.main.BaseTimeEntity;
 import com.partyhelper.modules.settings.domain.Tag;
+import com.partyhelper.modules.settings.domain.Zone;
 import lombok.*;
 
 import javax.persistence.*;
@@ -82,6 +83,9 @@ public class Account extends BaseTimeEntity {
 
     @ManyToMany
     private Set<Tag> tags = new HashSet<>();
+
+    @ManyToMany
+    private Set<Zone> zones = new HashSet<>();
 
     public void generateEmailCheckToken() { // 이메일 인증 토큰 생성
         this.emailCheckToken = UUID.randomUUID().toString();

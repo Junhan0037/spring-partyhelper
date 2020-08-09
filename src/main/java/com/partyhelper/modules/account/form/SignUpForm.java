@@ -1,5 +1,6 @@
 package com.partyhelper.modules.account.form;
 
+import com.partyhelper.modules.account.Role;
 import lombok.Data;
 import org.hibernate.validator.constraints.Length;
 
@@ -26,5 +27,7 @@ public class SignUpForm {
     @NotBlank
     @Length(min = 8, max = 50)
     private String passwordConfirm;
+
+    private Role role = Role.OAUTH;
 
 }
