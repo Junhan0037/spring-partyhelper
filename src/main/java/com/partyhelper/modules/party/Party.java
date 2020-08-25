@@ -10,6 +10,11 @@ import java.time.LocalDateTime;
 import java.util.HashSet;
 import java.util.Set;
 
+@NamedEntityGraph(name = "Party.withAll", attributeNodes = {
+        @NamedAttributeNode("tags"),
+        @NamedAttributeNode("zones"),
+        @NamedAttributeNode("managers"),
+        @NamedAttributeNode("members")})
 @Entity
 @Getter @Setter @EqualsAndHashCode(of = "id")
 @Builder @AllArgsConstructor @NoArgsConstructor
@@ -19,10 +24,10 @@ public class Party {
     private Long id;
 
     @ManyToMany
-    private Set<Account> managers = new HashSet<>(); // 전담 업체
+    private Set<Account> managers = new HashSet<>(); // 고객
 
     @ManyToMany
-    private Set<Account> members = new HashSet<>(); // 예약 고객
+    private Set<Account> members = new HashSet<>(); // 업체
 
     @Column(unique = true)
     private String path;
@@ -61,6 +66,28 @@ public class Party {
 
     public void addManager(Account account) {
         this.managers.add(account);
+    }
+
+    public boolean isJoinable(Account account) {
+        return this.isPublished() && this.isRecruiting() && !isMember(account) && !isManager(account);
+    }
+
+    public boolean isMember(Account account) {
+        for (Account member : this.members) {
+            if (account.getId().equals(member.getId())) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    public boolean isManager(Account account) {
+        for (Account manager : this.managers) {
+            if (account.getId().equals(manager.getId())) {
+                return true;
+            }
+        }
+        return false;
     }
 
 }

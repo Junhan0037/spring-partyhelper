@@ -12,6 +12,7 @@ import org.springframework.validation.Errors;
 import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.InitBinder;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 
 import javax.validation.Valid;
@@ -23,8 +24,9 @@ import java.nio.charset.StandardCharsets;
 public class PartyController {
 
     private final PartyService partyService;
-    private final ModelMapper modelMapper;
     private final PartyFormValidator partyFormValidator;
+    private final PartyRepository partyRepository;
+    private final ModelMapper modelMapper;
 
     @InitBinder("partyForm")
     public void initBinder(WebDataBinder webDataBinder) {
@@ -45,6 +47,13 @@ public class PartyController {
         }
         Party newParty = partyService.createNewParty(modelMapper.map(partyForm, Party.class), account);
         return "redirect:/party/" + URLEncoder.encode(newParty.getPath(), StandardCharsets.UTF_8);
+    }
+
+    @GetMapping("/party/{path}")
+    public String viewParty(@CurrentAccount Account account, @PathVariable String path, Model model) {
+        model.addAttribute(account);
+        model.addAttribute(partyRepository.findByPath(path));
+        return "party/view";
     }
 
 }

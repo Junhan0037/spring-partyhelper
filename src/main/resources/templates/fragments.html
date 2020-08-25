@@ -23,7 +23,7 @@
             margin: 0;
         }
 
-        #study-logo {
+        #party-logo {
             height: 200px;
             width: 100%;
             overflow: hidden;
@@ -31,7 +31,7 @@
             margin: 0;
         }
 
-        #study-logo img {
+        #party-logo img {
             height: auto;
             width: 100%;
             overflow: hidden;
@@ -109,7 +109,7 @@
     <div class="collapse navbar-collapse" id="navbarSupportedContent">
         <ul class="navbar-nav mr-auto">
             <li class="nav-item">
-                <form th:action="@{/search/study}" class="form-inline" method="get">
+                <form th:action="@{/search/party}" class="form-inline" method="get">
                     <input class="form-control mr-sm-2" name="keyword" type="search" placeholder="파티 찾기" aria-label="Search" />
                 </form>
             </li>
@@ -153,7 +153,7 @@
                     </h6>
 <!--                    <a class="dropdown-item" th:href="@{'/profile/' + ${#authentication.name}}">프로필</a>-->
                     <a class="dropdown-item" th:href="@{'/profile/' + ${session.account.getEmail()}}">프로필</a>
-                    <a class="dropdown-item" >스터디</a>
+                    <a class="dropdown-item" >파티</a>
                     <div class="dropdown-divider"></div>
                     <a class="dropdown-item" href="#" th:href="@{'/settings/profile'}">설정</a>
                     <form class="form-inline my-2 my-lg-0" action="#" th:action="@{/logout}" method="post">
@@ -326,6 +326,97 @@
             });
         });
     </script>
+</div>
+
+<div th:fragment="party-banner" th:if="${party.useBanner}" class="row" id="party-logo">
+    <img th:src="${party.image}"/>
+</div>
+
+<div th:fragment="party-info">
+    <div class="row pt-4 text-left justify-content-center bg-light">
+        <div class="col-6">
+            <a href="#" class="text-decoration-none" th:href="@{'/party/' + ${party.path}}">
+                <span class="h2" th:text="${party.title}">파티 이름</span>
+            </a>
+        </div>
+        <div class="col-4 text-right justify-content-end">
+            <span th:if="${!party.published}"
+                  class="d-inline-block" tabindex="0" data-toggle="tooltip" data-placement="bottom"
+                  title="파티 공개 준비중">
+                <button class="btn btn-primary btn-sm" style="pointer-events: none;" type="button" disabled>DRAFT</button>
+            </span>
+            <span th:if="${party.closed}"
+                  class="d-inline-block" tabindex="0" data-toggle="tooltip" data-placement="bottom" title="파티 종료함">
+                    <button class="btn btn-primary btn-sm" style="pointer-events: none;" type="button" disabled>CLOSED</button>
+            </span>
+            <span th:if="${!party.recruiting}"
+                  class="d-inline-block ml-1" tabindex="0" data-toggle="tooltip" data-placement="bottom" title="업체 모집중 아님">
+                    <button class="btn btn-primary btn-sm" style="pointer-events: none;" type="button" disabled>OFF</button>
+            </span>
+            <span sec:authorize="isAuthenticated()" th:if="${party.isJoinable(account)}"
+                  class="btn-group" role="group" aria-label="Basic example">
+                    <a class="btn btn-primary" th:href="@{'/party/' + ${party.path} + '/join'}">
+                        파티 가입
+                    </a>
+                    <a class="btn btn-outline-primary" th:href="@{'/party/' + ${party.path} + '/members'}"
+                       th:text="${party.members.size()}">1</a>
+            </span>
+            <span sec:authorize="isAuthenticated()"
+                  th:if="${!party.closed && party.isMember(account)}" class="btn-group" role="group">
+                    <a class="btn btn-outline-warning" th:href="@{'/party/' + ${party.path} + '/leave'}">
+                        파티 탈퇴
+                    </a>
+                    <a class="btn btn-outline-primary" th:href="@{'/party/' + ${party.path} + '/members'}"
+                       th:text="${party.members.size()}">1</a>
+            </span>
+            <span sec:authorize="isAuthenticated()"
+                  th:if="${party.published && !party.closed && party.isManager(account)}">
+                    <a class="btn btn-outline-primary" th:href="@{'/party/' + ${party.path} + '/new-event'}">
+                        <i class="fa fa-plus"></i> 이벤트 만들기
+                    </a>
+            </span>
+        </div>
+    </div>
+    <div class="row justify-content-center bg-light">
+        <div class="col-10">
+            <p class="lead" th:text="${party.shortDescription}"></p>
+        </div>
+    </div>
+    <div class="row justify-content-center bg-light">
+        <div class="col-10">
+            <p>
+                <span th:each="tag: ${party.tags}"
+                      class="font-weight-light text-monospace badge badge-pill badge-info mr-3">
+                    <a th:href="@{'/search/tag/' + ${tag.title}}" class="text-decoration-none text-white">
+                        <i class="fa fa-tag"></i> <span th:text="${tag.title}">Tag</span>
+                    </a>
+                </span>
+                <span th:each="zone: ${party.zones}" class="font-weight-light text-monospace badge badge-primary mr-3">
+                    <a th:href="@{'/search/zone/' + ${zone.id}}" class="text-decoration-none text-white">
+                        <i class="fa fa-globe"></i> <span th:text="${zone.localNameOfCity}">City</span>
+                    </a>
+                </span>
+            </p>
+        </div>
+    </div>
+</div>
+
+<div th:fragment="party-menu (partyMenu)" class="row px-3 justify-content-center bg-light">
+    <nav class="col-10 nav nav-tabs">
+        <a class="nav-item nav-link" href="#" th:classappend="${partyMenu == 'info'}? active" th:href="@{'/party/' + ${party.path}}">
+            <i class="fa fa-info-circle"></i> 소개
+        </a>
+        <a class="nav-item nav-link" href="#" th:classappend="${partyMenu == 'members'}? active" th:href="@{'/party/' + ${party.path} + '/members'}">
+            <i class="fa fa-user"></i> 구성원
+        </a>
+        <a class="nav-item nav-link" th:classappend="${partyMenu == 'events'}? active" href="#" th:href="@{'/party/' + ${party.path} + '/events'}">
+            <i class="fa fa-calendar"></i> 이벤트
+        </a>
+        <a sec:authorize="isAuthenticated()" th:if="${party.isManager(account)}"
+           class="nav-item nav-link" th:classappend="${partyMenu == 'settings'}? active" href="#" th:href="@{'/party/' + ${party.path} + '/settings/description'}">
+            <i class="fa fa-cog"></i> 설정
+        </a>
+    </nav>
 </div>
 
 </html>
