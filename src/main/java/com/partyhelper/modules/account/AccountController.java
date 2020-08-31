@@ -27,19 +27,56 @@ public class AccountController {
         webDataBinder.addValidators(signUpFormValidator);
     }
 
-    @GetMapping("sign-up")
-    public String signUpForm(Model model) {
-        model.addAttribute("signUpForm", new SignUpForm());
+    @GetMapping("/login")
+    public String login() {
+        return "account/login";
+    }
+
+    @GetMapping("/login-user")
+    public String loginUserForm() {
+        return "account/login-user";
+    }
+
+    @GetMapping("/login-provider")
+    public String loginProviderForm() {
+        return "account/login-provider";
+    }
+
+    @GetMapping("/sign-up")
+    public String signUpForm() {
         return "account/sign-up";
     }
 
-    @PostMapping("/sign-up")
-    public String signUpSubmit(@Valid @ModelAttribute SignUpForm signUpForm, Errors errors) {
+    @GetMapping("/sign-up-user")
+    public String signUpUserForm(Model model) {
+        model.addAttribute("signUpForm", new SignUpForm());
+        return "account/sign-up-user";
+    }
+
+    @PostMapping("/sign-up-user")
+    public String signUpUserSubmit(@Valid @ModelAttribute SignUpForm signUpForm, Errors errors) {
         if(errors.hasErrors()) {
-            return "account/sign-up";
+            return "account/sign-up-user";
         }
 
         Account account = accountService.processNewAccount(signUpForm);
+        accountService.login(account);
+        return "redirect:/";
+    }
+
+    @GetMapping("/sign-up-provider")
+    public String signUpProviderForm(Model model) {
+        model.addAttribute("signUpForm", new SignUpForm());
+        return "account/sign-up-provider";
+    }
+
+    @PostMapping("/sign-up-provider")
+    public String signUpProviderSubmit(@Valid @ModelAttribute SignUpForm signUpForm, Errors errors) {
+        if(errors.hasErrors()) {
+            return "account/sign-up-provider";
+        }
+
+        Account account = accountService.processNewProvider(signUpForm);
         accountService.login(account);
         return "redirect:/";
     }

@@ -116,17 +116,17 @@
         </ul>
 
         <ul class="navbar-nav justify-content-end">
-            <li class="nav-item" sec:authorize="!isAuthenticated()">
-                <a class="nav-link" href="/oauth2/authorization/google">Google</a>
-            </li>
-            <li class="nav-item" sec:authorize="!isAuthenticated()">
-                <a class="nav-link" href="/oauth2/authorization/naver">Naver</a>
-            </li>
+<!--            <li class="nav-item" sec:authorize="!isAuthenticated()">-->
+<!--                <a class="nav-link" href="/oauth2/authorization/google">Google</a>-->
+<!--            </li>-->
+<!--            <li class="nav-item" sec:authorize="!isAuthenticated()">-->
+<!--                <a class="nav-link" href="/oauth2/authorization/naver">Naver</a>-->
+<!--            </li>-->
             <li class="nav-item" sec:authorize="!isAuthenticated()">
                 <a class="nav-link" th:href="@{/login}">로그인</a>
             </li>
             <li class="nav-item" sec:authorize="!isAuthenticated()">
-                <a class="nav-link" th:href="@{/sign-up}">가입</a>
+                <a class="nav-link" th:href="@{/sign-up}">회원가입</a>
             </li>
             <li class="nav-item" sec:authorize="isAuthenticated()">
                 <a class="nav-link" th:href="@{/notifications}">

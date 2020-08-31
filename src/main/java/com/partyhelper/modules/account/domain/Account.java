@@ -21,7 +21,6 @@ public class Account extends BaseTimeEntity {
     @GeneratedValue
     private Long id;
 
-//    @Column(nullable = false)
     private String name;
 
     @Column(unique = true)

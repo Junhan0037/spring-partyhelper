@@ -28,6 +28,6 @@ public class SignUpForm {
     @Length(min = 8, max = 50)
     private String passwordConfirm;
 
-    private Role role = Role.USER;
+    private Role role;
 
 }

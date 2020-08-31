@@ -13,7 +13,6 @@ import com.partyhelper.modules.settings.domain.Zone;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.modelmapper.ModelMapper;
-import org.springframework.mail.SimpleMailMessage;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -53,10 +52,25 @@ public class AccountService implements UserDetailsService {
         return newAccount;
     }
 
+    public Account processNewProvider(SignUpForm signUpForm) { // 이벤트 업체 회원 가입
+        Account newAccount = saveNewProvider(signUpForm);
+        sendSignUpConfirmEmail(newAccount);
+        return newAccount;
+    }
+
     private Account saveNewAccount(@ModelAttribute @Valid SignUpForm signUpForm) {
         signUpForm.setPassword(passwordEncoder.encode(signUpForm.getPassword()));
+        signUpForm.setRole(Role.USER);
         Account account = modelMapper.map(signUpForm, Account.class);
         account.generateEmailCheckToken(); // 이메일 확인 토큰 생성
+        return accountRepository.save(account);
+    }
+
+    private Account saveNewProvider(@ModelAttribute @Valid SignUpForm signUpForm) {
+        signUpForm.setPassword(passwordEncoder.encode(signUpForm.getPassword()));
+        signUpForm.setRole(Role.PROVIDER);
+        Account account = modelMapper.map(signUpForm, Account.class);
+        account.generateEmailCheckToken();
         return accountRepository.save(account);
     }
 
@@ -65,14 +79,14 @@ public class AccountService implements UserDetailsService {
         context.setVariable("link", "/check-email-token?token=" + newAccount.getEmailCheckToken() + "&email=" + newAccount.getEmail());
         context.setVariable("nickname", newAccount.getNickname());
         context.setVariable("linkName", "이메일 인증하기");
-        context.setVariable("message", "스터디올래 서비스를 이용하려면 링크를 클릭하세요.");
+        context.setVariable("message", "PartyHelper 서비스를 이용하려면 링크를 클릭하세요.");
         context.setVariable("host", appProperties.getHost());
 
         String message = templateEngine.process("mail/simple-link", context);
 
         EmailMessage emailMessage = EmailMessage.builder()
                 .to(newAccount.getEmail())
-                .subject("스터디올래, 회원 가입 인증")
+                .subject("PartyHelper, 회원 가입 인증")
                 .message(message)
                 .build();
 
