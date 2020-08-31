@@ -2,6 +2,7 @@ package com.partyhelper.modules.party;
 
 import com.partyhelper.modules.account.annotation.CurrentAccount;
 import com.partyhelper.modules.account.domain.Account;
+import com.partyhelper.modules.party.domain.Party;
 import com.partyhelper.modules.party.form.PartyForm;
 import com.partyhelper.modules.party.validator.PartyFormValidator;
 import lombok.RequiredArgsConstructor;

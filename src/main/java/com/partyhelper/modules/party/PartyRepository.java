@@ -1,5 +1,6 @@
 package com.partyhelper.modules.party;
 
+import com.partyhelper.modules.party.domain.Party;
 import org.springframework.data.jpa.repository.EntityGraph;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.transaction.annotation.Transactional;

@@ -1,4 +1,4 @@
-package com.partyhelper.modules.party;
+package com.partyhelper.modules.party.domain;
 
 import com.partyhelper.modules.account.domain.Account;
 import com.partyhelper.modules.settings.domain.Tag;
