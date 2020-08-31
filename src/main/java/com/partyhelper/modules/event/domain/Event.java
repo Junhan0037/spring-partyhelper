@@ -17,6 +17,9 @@ public class Event { // 이벤트(파티)
     @Id @GeneratedValue
     private Long id;
 
+    @Column(unique = true)
+    private String path;
+
     @ManyToOne
     private Account createBy;
 
@@ -27,7 +30,10 @@ public class Event { // 이벤트(파티)
     private String description;
 
     @Column(nullable = false)
-    private LocalDateTime eventDateTime;
+    private LocalDateTime startDateTime;
+
+    @Column(nullable = false)
+    private LocalDateTime endDateTime;
 
     @Column(nullable = false)
     private Integer limitOfEnrollments; // 참가 업체 제한 수
@@ -36,6 +42,9 @@ public class Event { // 이벤트(파티)
     private List<Enrollment> enrollments; // 참가 업체
 
     @Enumerated(EnumType.STRING)
-    private EventType eventType; // 선착순, 관리자 선택
+    private EventType eventType; // 선착순, 이용자 선택
+
+    @Column(nullable = false)
+    private Integer personnel; // 총 인원
 
 }
