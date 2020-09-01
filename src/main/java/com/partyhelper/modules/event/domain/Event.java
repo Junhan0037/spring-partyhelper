@@ -8,6 +8,7 @@ import lombok.Setter;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -40,7 +41,8 @@ public class Event { // 이벤트(파티)
     private Integer limitOfEnrollments; // 참가 업체 제한 수
 
     @OneToMany(mappedBy = "event") // 양방향 관계
-    private List<Enrollment> enrollments; // 참가 업체
+    @OrderBy("enrolledAt")
+    private List<Enrollment> enrollments = new ArrayList<>(); // 참가 업체
 
     @Enumerated(EnumType.STRING)
     private EventType eventType; // 선착순, 이용자 선택
@@ -56,6 +58,10 @@ public class Event { // 이벤트(파티)
         return isNotClosed() && isAlreadyEnrolled(account);
     }
 
+    public boolean canEnrollment() {
+        return isNotClosed() && this.startDateTime.isBefore(LocalDateTime.now());
+    }
+
     private boolean isNotClosed() {
         return this.endDateTime.isAfter(LocalDateTime.now());
     }
@@ -66,7 +72,7 @@ public class Event { // 이벤트(파티)
 
     private boolean isAlreadyEnrolled(Account account) {
         for (Enrollment e : this.enrollments) {
-            if (e.getAccount().equals(account)) {
+            if (e.getAccount().getId().equals(account.getId())) {
                 return true;
             }
         }
@@ -108,6 +114,34 @@ public class Event { // 이벤트(파티)
 
     private List<Enrollment> getWaitingList() {
         return this.enrollments.stream().filter(enrollment -> !enrollment.isAccepted()).collect(Collectors.toList());
+    }
+
+    public void addEnrollment(Enrollment enrollment) { // 연관관계
+        this.enrollments.add(enrollment);
+        enrollment.setEvent(this);
+    }
+
+    public void removeEnrollment(Enrollment enrollment) {
+        this.enrollments.remove(enrollment);
+        enrollment.setEvent(null);
+    }
+
+    public void acceptNextWaitingEnrollment() {
+        if (this.isAbleToAcceptWaitingEnrollment()) {
+            Enrollment enrollmentToAccept = this.getTheFirstWaitingEnrollment();
+            if (enrollmentToAccept != null) {
+                enrollmentToAccept.setAccepted(true);
+            }
+        }
+    }
+
+    private Enrollment getTheFirstWaitingEnrollment() {
+        for (Enrollment e : this.enrollments) {
+            if (!e.isAccepted()) {
+                return e;
+            }
+        }
+        return null;
     }
 
 }

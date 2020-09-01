@@ -93,4 +93,18 @@ public class EventController {
         return "redirect:/";
     }
 
+    @PostMapping("/event/{path}/enroll")
+    public String newEnrollment(@CurrentAccount Account account, @PathVariable String path) { // 참가 신청
+        Event event = eventRepository.findByPath(path);
+        eventService.newEnrollment(event, account);
+        return "redirect:/event/" + event.getPath();
+    }
+
+    @PostMapping("/event/{path}/disenroll")
+    public String cancelEnrollment(@CurrentAccount Account account, @PathVariable String path) { // 참가 취소
+        Event event = eventRepository.findByPath(path);
+        eventService.cancelEnrollment(event, account);
+        return "redirect:/event/" + event.getPath();
+    }
+
 }

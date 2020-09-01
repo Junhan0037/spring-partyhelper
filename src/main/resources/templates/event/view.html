@@ -11,19 +11,25 @@
             <span class="h2">
                 <a href="#" class="text-decoration-none"><span th:text="${event.title}">파티 이름</span></a>
             </span>
-<!--            <span class="h2" th:text="${event.title}"></span>-->
         </div>
         <div class="col-4 text-right justify-content-end">
+            <div th:if="${event.canEnrollment()}">
                 <span sec:authorize="isAuthenticated()" th:if="${account.role == T(com.partyhelper.modules.account.Role).PROVIDER}">
                     <button th:if="${event.isEnrollableFor(account)}"
                             class="btn btn-outline-primary" data-toggle="modal" data-target="#enroll">
                         <i class="fa fa-plus-circle"></i> 참가 신청
                     </button>
                     <button th:if="${event.isDisenrollableFor(account)}"
-                            class="btn btn-outline-primary" data-toggle="modal" data-target="#disenroll">
+                            class="btn btn-outline-danger" data-toggle="modal" data-target="#disenroll">
                         <i class="fa fa-minus-circle"></i> 참가 신청 취소
                     </button>
                 </span>
+            </div>
+            <div th:if="${!event.canEnrollment()}">
+                <button class="btn btn-warning" data-toggle="modal" disabled>
+                    <i class="fa fa-plus-circle"></i> 종료된 파티 입니다.
+                </button>
+            </div>
         </div>
         <div class="modal fade" id="disenroll" tabindex="-1" role="dialog" aria-labelledby="leaveTitle" aria-hidden="true">
             <div class="modal-dialog modal-dialog-centered" role="document">

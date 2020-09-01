@@ -1,12 +1,15 @@
 package com.partyhelper.modules.event;
 
 import com.partyhelper.modules.account.domain.Account;
+import com.partyhelper.modules.event.domain.Enrollment;
 import com.partyhelper.modules.event.domain.Event;
 import com.partyhelper.modules.event.form.EventForm;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.time.LocalDateTime;
 
 @Service
 @Transactional
@@ -15,6 +18,7 @@ public class EventService {
 
     private final EventRepository eventRepository;
     private final ModelMapper modelMapper;
+    private final EnrollmentRepository enrollmentRepository;
 
     public Event createEvent(Event event, Account account) {
         event.setCreatedBy(account);
@@ -29,6 +33,24 @@ public class EventService {
 
     public void deleteEvent(Event event) {
         eventRepository.delete(event);
+    }
+
+    public void newEnrollment(Event event, Account account) {
+        if (!enrollmentRepository.existsByEventAndAccount(event, account)) {
+            Enrollment enrollment = new Enrollment();
+            enrollment.setEnrolledAt(LocalDateTime.now());
+            enrollment.setAccepted(event.isAbleToAcceptWaitingEnrollment());
+            enrollment.setAccount(account);
+            event.addEnrollment(enrollment);
+            enrollmentRepository.save(enrollment);
+        }
+    }
+
+    public void cancelEnrollment(Event event, Account account) {
+        Enrollment enrollment = enrollmentRepository.findByEventAndAccount(event, account);
+        event.removeEnrollment(enrollment); // 관계 끊기
+        enrollmentRepository.delete(enrollment); // 삭제
+        event.acceptNextWaitingEnrollment(); // 대기상태를 확정상태로 변환
     }
 
 }
