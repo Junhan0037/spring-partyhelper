@@ -2,6 +2,7 @@ package com.partyhelper.modules.event;
 
 import com.partyhelper.modules.account.annotation.CurrentAccount;
 import com.partyhelper.modules.account.domain.Account;
+import com.partyhelper.modules.event.domain.Enrollment;
 import com.partyhelper.modules.event.domain.Event;
 import com.partyhelper.modules.event.form.EventForm;
 import com.partyhelper.modules.event.validator.EventValidator;
@@ -106,5 +107,21 @@ public class EventController {
         eventService.cancelEnrollment(event, account);
         return "redirect:/event/" + event.getPath();
     }
+
+    @PostMapping("/event/{path}/enrollment/{enrollmentId}/accept")
+    public String acceptEnrollment(@CurrentAccount Account account, @PathVariable String path, @PathVariable("enrollmentId") Enrollment enrollment) {
+        Event event = eventRepository.findByPath(path);
+        eventService.acceptEnrollment(event, enrollment);
+        return "redirect:/event/" + event.getPath();
+    }
+
+    @PostMapping("/event/{path}/enrollment/{enrollmentId}/reject")
+    public String rejectEnrollment(@CurrentAccount Account account, @PathVariable String path, @PathVariable("enrollmentId") Enrollment enrollment) {
+        Event event = eventRepository.findByPath(path);
+        eventService.rejectEnrollment(event, enrollment);
+        return "redirect:/event/" + event.getPath();
+    }
+
+
 
 }

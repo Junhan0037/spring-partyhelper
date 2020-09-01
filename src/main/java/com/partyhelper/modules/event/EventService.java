@@ -53,4 +53,14 @@ public class EventService {
         event.acceptNextWaitingEnrollment(); // 대기상태를 확정상태로 변환
     }
 
+    public void acceptEnrollment(Event event, Enrollment enrollment) {
+        event.accept(enrollment);
+//        eventPublisher.publishEvent(new EnrollmentAcceptedEvent(enrollment));
+    }
+
+    public void rejectEnrollment(Event event, Enrollment enrollment) {
+        event.reject(enrollment);
+//        eventPublisher.publishEvent(new EnrollmentRejectedEvent(enrollment));
+    }
+
 }

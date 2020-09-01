@@ -118,10 +118,12 @@
                             <span th:if="${!enroll.accepted}">대기중</span>
                         </td>
                         <td th:if="${event.isManager(account)}">
-                            <a th:if="${event.canAccept(enroll)}" href="#" class="text-decoration-none"
-                               th:href="@{'/event/' + ${event.path} + '/enrollments/' + ${enroll.id} + '/accept'}" >신청 수락</a>
-                            <a th:if="${event.canReject(enroll)}" href="#" class="text-decoration-none"
-                               th:href="@{'/event/' + ${event.path} + '/enrollments/' + ${enroll.id} + '/reject'}">취소</a>
+                            <form th:if="${event.canAccept(enroll)}" th:action="@{'/event/' + ${event.path} + '/enrollment/' + ${enroll.id} + '/accept'}" method="post">
+                                <button class="btn btn-outline-primary" type="submit" aria-describedby="submitHelp">신청 수락</button>
+                            </form>
+                            <form th:if="${event.canReject(enroll)}" th:action="@{'/event/' + ${event.path} + '/enrollment/' + ${enroll.id} + '/reject'}" method="post">
+                                <button class="btn btn-outline-danger" type="submit" aria-describedby="submitHelp">거부</button>
+                            </form>
                         </td>
                     </tr>
                     </tbody>
