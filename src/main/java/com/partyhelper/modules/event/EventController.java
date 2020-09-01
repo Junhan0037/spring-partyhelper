@@ -86,4 +86,11 @@ public class EventController {
         return "redirect:/event/" + event.getPath();
     }
 
+    @PostMapping("/event/{path}/delete")
+    public String cancelEvent(@CurrentAccount Account account, @PathVariable String path) {
+        Event event = eventRepository.findByPath(path);
+        eventService.deleteEvent(event);
+        return "redirect:/";
+    }
+
 }

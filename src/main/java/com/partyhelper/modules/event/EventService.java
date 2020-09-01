@@ -27,4 +27,8 @@ public class EventService {
 //        eventPublisher.publishEvent(new StudyUpdateEvent(event.getStudy(), "'" + event.getTitle() + "' 모임 정보를 수정했으니 확인하세요."));
     }
 
+    public void deleteEvent(Event event) {
+        eventRepository.delete(event);
+    }
+
 }

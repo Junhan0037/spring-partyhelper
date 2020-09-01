@@ -41,7 +41,7 @@
                     </div>
                     <div class="modal-footer">
                         <button type="button" class="btn btn-secondary" data-dismiss="modal">닫기</button>
-                        <form th:action="@{'/events/' + ${event.path} + '/disenroll'}" method="post">
+                        <form th:action="@{'/event/' + ${event.path} + '/disenroll'}" method="post">
                             <button class="btn btn-primary" type="submit" aria-describedby="submitHelp">확인</button>
                         </form>
                     </div>
@@ -64,7 +64,7 @@
                     </div>
                     <div class="modal-footer">
                         <button type="button" class="btn btn-secondary" data-dismiss="modal">닫기</button>
-                        <form th:action="@{'/events/' + ${event.path} + '/enroll'}" method="post">
+                        <form th:action="@{'/event/' + ${event.path} + '/enroll'}" method="post">
                             <button class="btn btn-primary" type="submit" aria-describedby="submitHelp">확인</button>
                         </form>
                     </div>
@@ -188,7 +188,7 @@
                     </div>
                     <div class="modal-footer">
                         <button type="button" class="btn btn-secondary" data-dismiss="modal">닫기</button>
-                        <form th:action="@{'/event/' + ${event.path}}" th:method="delete">
+                        <form th:action="@{'/event/' + ${event.path} + '/delete'}" method="post">
                             <button class="btn btn-primary" type="submit" aria-describedby="submitHelp">확인</button>
                         </form>
                     </div>
