@@ -73,7 +73,6 @@ public class Party {
     }
 
     public boolean isMember(Account account) {
-//        this.members.contains(account);
         for (Account member : this.members) {
             if (account.getId().equals(member.getId())) {
                 return true;
@@ -83,7 +82,6 @@ public class Party {
     }
 
     public boolean isManager(Account account) {
-//        this.managers.contains(account);
         for (Account manager : this.managers) {
             if (account.getId().equals(manager.getId())) {
                 return true;

@@ -13,6 +13,7 @@ import org.springframework.validation.Errors;
 import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.InitBinder;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 
 import javax.validation.Valid;
@@ -26,6 +27,7 @@ public class EventController {
     private final EventService eventService;
     private final ModelMapper modelMapper;
     private final EventValidator eventValidator;
+    private final EventRepository eventRepository;
 
     @InitBinder("eventform")
     public void initBinder(WebDataBinder webDataBinder) {
@@ -48,7 +50,14 @@ public class EventController {
         }
 
         Event event = eventService.createEvent(modelMapper.map(eventForm, Event.class), account);
-        return "redirect:/" + URLEncoder.encode(event.getPath(), StandardCharsets.UTF_8);
+        return "redirect:/event/" + URLEncoder.encode(event.getPath(), StandardCharsets.UTF_8);
+    }
+
+    @GetMapping("/event/{path}")
+    public String getEvent(@CurrentAccount Account account, @PathVariable String path, Model model) {
+        model.addAttribute(account);
+        model.addAttribute(eventRepository.findByPath(path));
+        return "event/view";
     }
 
 }

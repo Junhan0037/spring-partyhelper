@@ -21,7 +21,7 @@ public class Event { // 이벤트(파티)
     private String path;
 
     @ManyToOne
-    private Account createBy;
+    private Account createdBy;
 
     @Column(nullable = false)
     private String title;
@@ -46,5 +46,51 @@ public class Event { // 이벤트(파티)
 
     @Column(nullable = false)
     private Integer personnel; // 총 인원
+
+    public boolean isEnrollableFor(Account account) { // 참가 가능
+        return isNotClosed() && !isAlreadyEnrolled(account);
+    }
+
+    public boolean isDisenrollableFor(Account account) { // 참가 불가능
+        return isNotClosed() && isAlreadyEnrolled(account);
+    }
+
+    private boolean isNotClosed() {
+        return this.endDateTime.isAfter(LocalDateTime.now());
+    }
+
+    public int numberOfRemainSpots() {
+        return this.limitOfEnrollments - (int) this.enrollments.stream().filter(Enrollment::isAccepted).count();
+    }
+
+    private boolean isAlreadyEnrolled(Account account) {
+        for (Enrollment e : this.enrollments) {
+            if (e.getAccount().equals(account)) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    public long getNumberOfAcceptedEnrollments() {
+        return this.enrollments.stream().filter(Enrollment::isAccepted).count();
+    }
+
+    public boolean isManager(Account account) {
+        return this.createdBy.getId().equals(account.getId());
+    }
+
+    public boolean canAccept(Enrollment enrollment) {
+        return this.eventType == EventType.CONFIRMATIVE
+                && this.enrollments.contains(enrollment)
+                && this.limitOfEnrollments > this.getNumberOfAcceptedEnrollments()
+                && !enrollment.isAccepted();
+    }
+
+    public boolean canReject(Enrollment enrollment) {
+        return this.eventType == EventType.CONFIRMATIVE
+                && this.enrollments.contains(enrollment)
+                && enrollment.isAccepted();
+    }
 
 }

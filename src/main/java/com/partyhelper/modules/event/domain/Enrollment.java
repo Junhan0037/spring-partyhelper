@@ -9,6 +9,7 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.ManyToOne;
+import java.time.LocalDateTime;
 
 @Entity
 @Getter @Setter @EqualsAndHashCode(of = "id")
@@ -22,5 +23,9 @@ public class Enrollment { // 참가 업체
 
     @ManyToOne
     private Account account;
+
+    private boolean accepted; // 승인 여부
+
+    private LocalDateTime enrolledAt;
 
 }

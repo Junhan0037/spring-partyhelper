@@ -6,4 +6,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 @Transactional(readOnly = true)
 public interface EventRepository extends JpaRepository<Event, Long> {
+
+    Event findByPath(String path);
+
 }

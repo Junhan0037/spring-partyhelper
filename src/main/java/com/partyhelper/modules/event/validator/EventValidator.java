@@ -29,8 +29,7 @@ public class EventValidator implements Validator {
     }
 
     private boolean isNotValidStartDateTime(EventForm eventForm) {
-        LocalDateTime currentDateTime  = LocalDateTime.now();
-        return eventForm.getStartDateTime().isBefore(currentDateTime);
+        return eventForm.getStartDateTime().isBefore(LocalDateTime.now());
     }
 
     private boolean isNotValidEndDateTime(EventForm eventForm) {

@@ -14,7 +14,7 @@ public class EventService {
     private final EventRepository eventRepository;
 
     public Event createEvent(Event event, Account account) {
-        event.setCreateBy(account);
+        event.setCreatedBy(account);
         return eventRepository.save(event);
     }
 
