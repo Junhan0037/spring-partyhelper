@@ -60,4 +60,30 @@ public class EventController {
         return "event/view";
     }
 
+    @GetMapping("/event/{path}/edit")
+    public String updateEventForm(@CurrentAccount Account account, @PathVariable String path, Model model) {
+        Event event = eventRepository.findByPath(path);
+        model.addAttribute(event);
+        model.addAttribute(account);
+        model.addAttribute(modelMapper.map(event, EventForm.class));
+        return "event/update-form";
+    }
+
+    @PostMapping("/event/{path}/edit")
+    public String updateEventSubmit(@CurrentAccount Account account, @PathVariable String path, @Valid EventForm eventForm,
+                                    Errors errors, Model model) {
+        Event event = eventRepository.findByPath(path);
+        eventForm.setEventType(event.getEventType()); // 기존의 모집 방식 유지
+        eventValidator.validateUpdateForm(eventForm, event, errors);
+
+        if (errors.hasErrors()) {
+            model.addAttribute(account);
+            model.addAttribute(event);
+            return "event/update-form";
+        }
+
+        eventService.updateEvent(event, eventForm);
+        return "redirect:/event/" + event.getPath();
+    }
+
 }
