@@ -109,19 +109,13 @@
     <div class="collapse navbar-collapse" id="navbarSupportedContent">
         <ul class="navbar-nav mr-auto">
             <li class="nav-item">
-                <form th:action="@{/search/party}" class="form-inline" method="get">
+                <form th:action="@{/search/event}" class="form-inline" method="get">
                     <input class="form-control mr-sm-2" name="keyword" type="search" placeholder="파티 찾기" aria-label="Search" />
                 </form>
             </li>
         </ul>
 
         <ul class="navbar-nav justify-content-end">
-<!--            <li class="nav-item" sec:authorize="!isAuthenticated()">-->
-<!--                <a class="nav-link" href="/oauth2/authorization/google">Google</a>-->
-<!--            </li>-->
-<!--            <li class="nav-item" sec:authorize="!isAuthenticated()">-->
-<!--                <a class="nav-link" href="/oauth2/authorization/naver">Naver</a>-->
-<!--            </li>-->
             <li class="nav-item" sec:authorize="!isAuthenticated()">
                 <a class="nav-link" th:href="@{/login}">로그인</a>
             </li>
@@ -242,7 +236,7 @@
             var tagInput = document.querySelector("#tags");
             var tagify = new Tagify(tagInput, {
                 pattern: /^.{0,20}$/,
-                whitelist: JSON.parse(document.querySelector("#whitelist").textContent),
+                whitelist: JSON.parse(document.querySelector("#taglist").textContent),
                 dropdown : {
                     enabled: 1, // suggest tags after a single character input
                 } // map tags
@@ -289,7 +283,7 @@
 
             var tagify = new Tagify(tagInput, {
                 enforceWhitelist: true,
-                whitelist: JSON.parse(document.querySelector("#whitelist").textContent),
+                whitelist: JSON.parse(document.querySelector("#zonelist").textContent),
                 dropdown : {
                     enabled: 1, // suggest tags after a single character input
                 } // map tags
@@ -484,7 +478,7 @@
                     <input id="startDateTime" type="datetime-local" th:field="*{startDateTime}" class="form-control"
                            aria-describedby="startDateTimeHelp" required>
                     <small id="startDateTimeHelp" class="form-text text-muted">
-                        파티 시작 일시를 입력하세요. 상세한 파티 일정은 본문에 적어주세요.
+                        파티 시작 일시를 입력하세요. 상세한 파티 일정은 본문에 적어주세요. 하루 전에 자동으로 이벤트 업체 신청이 마감 됩니다.
                     </small>
                     <small class="invalid-feedback">파티 시작 일시를 입력하세요.</small>
                     <small class="form-text text-danger" th:if="${#fields.hasErrors('startDateTime')}" th:errors="*{startDateTime}">Error</small>
@@ -546,6 +540,42 @@
             });
         })
     </script>
+</div>
+
+<div th:fragment="event-list (eventList)" class="col-sm-12">
+    <div class="row">
+        <div class="col-md-4" th:each="event: ${eventList}">
+            <div class="card mb-4 shadow-sm">
+<!--                <img th:src="${study.image}" class="card-img-top" th:alt="${study.title}" >-->
+                <div class="card-body">
+                    <a th:href="@{'/event/' + ${event.path}}" class="text-decoration-none">
+                        <h5 class="card-title context" th:text="${event.title}"></h5>
+                    </a>
+<!--                    <p class="card-text" th:text="${event.shortDescription}">Short description</p>-->
+                    <p class="card-text context">
+                                <span th:each="tag: ${event.tags}" class="font-weight-light text-monospace badge badge-pill badge-info mr-3">
+                                    <a th:href="@{'/search/tag/' + ${tag.title}}" class="text-decoration-none text-white">
+                                        <i class="fa fa-tag"></i> <span th:text="${tag.title}">Tag</span>
+                                    </a>
+                                </span>
+                        <span th:each="zone: ${event.zones}" class="font-weight-light text-monospace badge badge-primary mr-3">
+                                    <a th:href="@{'/search/zone/' + ${zone.id}}" class="text-decoration-none text-white">
+                                        <i class="fa fa-globe"></i> <span th:text="${zone.localNameOfCity}" class="text-white">City</span>
+                                    </a>
+                                </span>
+                    </p>
+                    <div class="d-flex justify-content-between align-items-center">
+                        <small class="text-muted">
+                            <i class="fa fa-user-circle"></i>
+                            <span th:text="${event.memberCount}"></span>개
+<!--                            <span th:text="${event.enrollments.size()}"></span>개-->
+                        </small>
+                        <small class="text-muted date" th:text="${event.startDateTime}">9 mins</small>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
 </div>
 
 </html>

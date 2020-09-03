@@ -13,7 +13,7 @@
             </span>
         </div>
         <div class="col-4 text-right justify-content-end">
-            <div th:if="${event.canEnrollment()}">
+            <div th:if="${event.isNotClosed()}">
                 <span sec:authorize="isAuthenticated()" th:if="${account.role == T(com.partyhelper.modules.account.Role).PROVIDER}">
                     <button th:if="${event.isEnrollableFor(account)}"
                             class="btn btn-outline-primary" data-toggle="modal" data-target="#enroll">
@@ -24,10 +24,15 @@
                         <i class="fa fa-minus-circle"></i> 참가 신청 취소
                     </button>
                 </span>
+                <span sec:authorize="isAuthenticated()" th:if="${account.role != T(com.partyhelper.modules.account.Role).PROVIDER}">
+                    <button class="btn btn-success" data-toggle="modal" disabled>
+                        <i class="fa fa-plus-circle"></i> 모집 중 입니다.
+                    </button>
+                </span>
             </div>
-            <div th:if="${!event.canEnrollment()}">
+            <div th:if="${!event.isNotClosed()}">
                 <button class="btn btn-warning" data-toggle="modal" disabled>
-                    <i class="fa fa-plus-circle"></i> 종료된 파티 입니다.
+                    <i class="fa fa-minus-circle"></i> 참가 신청이 마감 되었습니다.
                 </button>
             </div>
         </div>
@@ -82,9 +87,48 @@
         <div class="col-7 pt-3">
             <dt class="font-weight-light">상세 모임 설명</dt>
             <dd th:utext="${event.description}"></dd>
-            <br/>
+            <hr>
+
+            <div th:if="${event.isManager(account)}">
+                <div class="row">
+                    <div class="col-8">
+                        <dt class="font-weight-light">태그를 등록하세요. 태그를 입력하고 콤마(,) 또는 엔터를 입력하세요.</dt>
+                        <div id="taglist" th:text="${taglist}" hidden></div>
+                        <input id="tags" type="text" name="tags" th:value="${#strings.listJoin(tags, ',')}" class="tagify-outside" aria-describedby="tagHelp">
+                    </div>
+                </div>
+                <br/>
+                <div class="row">
+                    <div class="col-8">
+                        <dt class="font-weight-light">파티를 하는 지역을 등록하세요. 시스템에 등록된 지역만 선택할 수 있습니다.</dt>
+                        <div id="zonelist" th:text="${zonelist}" hidden></div>
+                        <input id="zones" type="text" name="zones" th:value="${#strings.listJoin(zones, ',')}" class="tagify-outside">
+                    </div>
+                </div>
+                <hr>
+            </div>
+
+            <div th:if="${!event.isManager(account)}">
+                <p class="card-text context">
+                    <span th:each="tag: ${event.tags}" class="font-weight-light text-monospace badge badge-pill badge-info mr-3">
+                        <a th:href="@{'/search/tag/' + ${tag.title}}" class="text-decoration-none text-white">
+                            <i class="fa fa-tag"></i> <span th:text="${tag.title}">Tag</span>
+                        </a>
+                    </span>
+                    <span th:each="zone: ${event.zones}" class="font-weight-light text-monospace badge badge-primary mr-3">
+                        <a th:href="@{'/search/zone/' + ${zone.id}}" class="text-decoration-none text-white">
+                            <i class="fa fa-globe"></i> <span th:text="${zone.localNameOfCity}" class="text-white">City</span>
+                        </a>
+                    </span>
+                </p>
+                <hr>
+            </div>
+
             <dt class="font-weight-light">이벤트 참가 업체 (<span th:text="${event.enrollments.size()}"></span>)</dt>
             <dd>
+                <div th:if="${event.enrollments.size() == 0}" class="col">
+                    새 모임이 없습니다.
+                </div>
                 <table class="table table-borderless table-sm" th:if="${event.enrollments.size() > 0}">
                     <thead>
                     <tr>
@@ -132,7 +176,7 @@
         </div>
         <dl class="col-3 pt-3 text-right">
             <dt class="font-weight-light">모집 방법</dt>
-            <dd>
+            <dd class="text-success">
                 <span th:if="${event.eventType == T(com.partyhelper.modules.event.EventType).CONFIRMATIVE}">관리자 확인</span>
                 <span th:if="${event.eventType == T(com.partyhelper.modules.event.EventType).FCFS}">선착순</span>
             </dd>
@@ -145,6 +189,13 @@
             <dt class="font-weight-light">모집 업체 수</dt>
             <dd>
                 <span th:text="${event.limitOfEnrollments}"></span>개
+            </dd>
+
+            <dt class="font-weight-light">모집 마감 시기</dt>
+            <dd class="text-danger">
+                <span class="date " th:text="${event.getEnrollmentTime()}"></span>
+                <span class="weekday" th:text="${event.getEnrollmentTime()}"></span>
+                <span class="time" th:text="${event.getEnrollmentTime()}"></span>
             </dd>
 
             <dt class="font-weight-light">파티 기간</dt>
@@ -207,5 +258,8 @@
     <div th:replace="fragments.html :: footer"></div>
 </div>
 <script th:replace="fragments.html :: date-time"></script>
+<script th:replace="fragments.html :: ajax-csrf-header"></script>
+<script th:replace="fragments.html :: update-tags(baseUrl='/event/' + ${event.path} + '/tags')"></script>
+<script th:replace="fragments.html :: update-zones(baseUrl='/event/' + ${event.path} + '/zones')"></script>
 </body>
 </html>

@@ -34,14 +34,15 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 //                .and()
                     .authorizeRequests() // URL별 권한 관리를 설정하는 옵션의 시작점
                     .antMatchers("/", "/css/**", "/images/**", "/js/**", "/h2-console/**", "/profile", "/login", "/login-user", "/login-provider",
-                            "/sign-up", "/sign-up-user", "/sign-up-provider", "/check-email", "/check-email-token",
-                            "/email-login", "/check-email-login", "/login-link", "/login-by-email").permitAll() // 전체 열람 권한
+                            "/sign-up", "/sign-up-user", "/sign-up-provider", "/check-email", "/check-email-token", "/search/event",
+                            "/email-login", "/check-email-login", "/login-link", "/login-by-email", "/favicon.ico", "/resources/**", "/error").permitAll() // 전체 열람 권한
                     .antMatchers("/api/v1/**").hasRole(Role.USER.name()) // USER 권한을 가진 사람만 가능
                     .antMatchers(HttpMethod.GET, "/profile/*").permitAll()
                     .anyRequest().authenticated() // anyRequest() : 설정한 값들 이외 나머지 URL. => 나머지 URL들은 모두 인증과정을 거친다
                 .and()
                     .formLogin()
-                        .loginPage("/login").permitAll()
+                        .loginPage("/login-user").permitAll()
+                        .loginPage("/login-provider").permitAll() // 에러
                 .and()
                     .logout()
                         .logoutSuccessUrl("/") // 로그아웃 성공 시 "/" 주소로 이동

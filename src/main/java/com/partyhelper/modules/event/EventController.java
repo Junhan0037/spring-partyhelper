@@ -1,25 +1,35 @@
 package com.partyhelper.modules.event;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.partyhelper.modules.account.annotation.CurrentAccount;
 import com.partyhelper.modules.account.domain.Account;
 import com.partyhelper.modules.event.domain.Enrollment;
 import com.partyhelper.modules.event.domain.Event;
 import com.partyhelper.modules.event.form.EventForm;
 import com.partyhelper.modules.event.validator.EventValidator;
+import com.partyhelper.modules.settings.TagRepository;
+import com.partyhelper.modules.settings.TagService;
+import com.partyhelper.modules.settings.ZoneRepository;
+import com.partyhelper.modules.settings.ZoneService;
+import com.partyhelper.modules.settings.domain.Tag;
+import com.partyhelper.modules.settings.domain.Zone;
+import com.partyhelper.modules.settings.form.TagForm;
+import com.partyhelper.modules.settings.form.ZoneForm;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.Errors;
 import org.springframework.web.bind.WebDataBinder;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.InitBinder;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 import java.net.URLEncoder;
 import java.nio.charset.StandardCharsets;
+import java.util.List;
+import java.util.stream.Collectors;
 
 @Controller
 @RequiredArgsConstructor
@@ -29,6 +39,11 @@ public class EventController {
     private final ModelMapper modelMapper;
     private final EventValidator eventValidator;
     private final EventRepository eventRepository;
+    private final TagRepository tagRepository;
+    private final TagService tagService;
+    private final ZoneRepository zoneRepository;
+    private final ZoneService zoneService;
+    private final ObjectMapper objectMapper;
 
     @InitBinder("eventform")
     public void initBinder(WebDataBinder webDataBinder) {
@@ -55,10 +70,62 @@ public class EventController {
     }
 
     @GetMapping("/event/{path}")
-    public String getEvent(@CurrentAccount Account account, @PathVariable String path, Model model) {
+    public String getEvent(@CurrentAccount Account account, @PathVariable String path, Model model) throws JsonProcessingException {
+        Event event = eventRepository.findByPath(path);
         model.addAttribute(account);
-        model.addAttribute(eventRepository.findByPath(path));
+        model.addAttribute(event);
+
+        model.addAttribute("tags", event.getTags().stream().map(Tag::getTitle).collect(Collectors.toList()));
+        List<String>allTagTitles = tagRepository.findAll().stream().map(Tag::getTitle).collect(Collectors.toList());
+        model.addAttribute("taglist", objectMapper.writeValueAsString(allTagTitles));
+
+        model.addAttribute("zones", event.getZones().stream().map(Zone::toString).collect(Collectors.toList()));
+        List<String>allZones = zoneRepository.findAll().stream().map(Zone::toString).collect(Collectors.toList());
+        model.addAttribute("zonelist", objectMapper.writeValueAsString(allZones));
+
         return "event/view";
+    }
+
+    @PostMapping("/event/{path}/tags/add")
+    public ResponseEntity addTag(@CurrentAccount Account account, @PathVariable String path, @RequestBody TagForm tagForm) {
+        Event event = eventRepository.findByPath(path);
+        Tag tag = tagService.findOrCreateNew(tagForm.getTagTitle());
+        eventService.addTag(event, tag);
+        return ResponseEntity.ok().build();
+    }
+
+    @PostMapping("/event/{path}/tags/remove")
+    @ResponseBody
+    public ResponseEntity removeTag(@CurrentAccount Account account, @PathVariable String path, @RequestBody TagForm tagForm) {
+        Event event = eventRepository.findByPath(path);
+        Tag tag = tagRepository.findByTitle(tagForm.getTagTitle());
+        if (tag == null) {
+            return ResponseEntity.badRequest().build();
+        }
+        eventService.removeTag(event, tag);
+        return ResponseEntity.ok().build();
+    }
+
+    @PostMapping("/event/{path}/zones/add")
+    public ResponseEntity addZone(@CurrentAccount Account account, @PathVariable String path, @RequestBody ZoneForm zoneForm) {
+        Event event = eventRepository.findByPath(path);
+        Zone zone = zoneRepository.findByCityAndProvince(zoneForm.getCityName(), zoneForm.getProvinceName());
+        if (zone == null) {
+            return ResponseEntity.badRequest().build();
+        }
+        eventService.addZone(event, zone);
+        return ResponseEntity.ok().build();
+    }
+
+    @PostMapping("/event/{path}/zones/remove")
+    public ResponseEntity removeZone(@CurrentAccount Account account, @PathVariable String path, @RequestBody ZoneForm zoneForm) {
+        Event event = eventRepository.findByPath(path);
+        Zone zone = zoneRepository.findByCityAndProvince(zoneForm.getCityName(), zoneForm.getProvinceName());
+        if (zone == null) {
+            return ResponseEntity.badRequest().build();
+        }
+        eventService.removeZone(event, zone);
+        return ResponseEntity.ok().build();
     }
 
     @GetMapping("/event/{path}/edit")
@@ -97,6 +164,7 @@ public class EventController {
     @PostMapping("/event/{path}/enroll")
     public String newEnrollment(@CurrentAccount Account account, @PathVariable String path) { // 참가 신청
         Event event = eventRepository.findByPath(path);
+        eventService.addMember(event);
         eventService.newEnrollment(event, account);
         return "redirect:/event/" + event.getPath();
     }
@@ -104,6 +172,7 @@ public class EventController {
     @PostMapping("/event/{path}/disenroll")
     public String cancelEnrollment(@CurrentAccount Account account, @PathVariable String path) { // 참가 취소
         Event event = eventRepository.findByPath(path);
+        eventService.removeMember(event);
         eventService.cancelEnrollment(event, account);
         return "redirect:/event/" + event.getPath();
     }

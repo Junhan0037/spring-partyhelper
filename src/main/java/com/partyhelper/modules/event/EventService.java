@@ -4,6 +4,8 @@ import com.partyhelper.modules.account.domain.Account;
 import com.partyhelper.modules.event.domain.Enrollment;
 import com.partyhelper.modules.event.domain.Event;
 import com.partyhelper.modules.event.form.EventForm;
+import com.partyhelper.modules.settings.domain.Tag;
+import com.partyhelper.modules.settings.domain.Zone;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
@@ -61,6 +63,30 @@ public class EventService {
     public void rejectEnrollment(Event event, Enrollment enrollment) {
         event.reject(enrollment);
 //        eventPublisher.publishEvent(new EnrollmentRejectedEvent(enrollment));
+    }
+
+    public void addTag(Event event, Tag tag) {
+        event.getTags().add(tag);
+    }
+
+    public void removeTag(Event event, Tag tag) {
+        event.getTags().remove(tag);
+    }
+
+    public void addZone(Event event, Zone zone) {
+        event.getZones().add(zone);
+    }
+
+    public void removeZone(Event event, Zone zone) {
+        event.getZones().remove(zone);
+    }
+
+    public void addMember(Event event) {
+        event.addMember();
+    }
+
+    public void removeMember(Event event) {
+        event.removeMember();
     }
 
 }

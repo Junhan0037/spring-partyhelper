@@ -2,6 +2,8 @@ package com.partyhelper.modules.event.domain;
 
 import com.partyhelper.modules.account.domain.Account;
 import com.partyhelper.modules.event.EventType;
+import com.partyhelper.modules.settings.domain.Tag;
+import com.partyhelper.modules.settings.domain.Zone;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.Setter;
@@ -9,7 +11,9 @@ import lombok.Setter;
 import javax.persistence.*;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 @Entity
@@ -50,6 +54,14 @@ public class Event { // 이벤트(파티)
     @Column(nullable = false)
     private Integer personnel; // 총 인원
 
+    @ManyToMany
+    private Set<Tag> tags = new HashSet<>();
+
+    @ManyToMany
+    private Set<Zone> zones = new HashSet<>();
+
+    private int memberCount = 0;
+
     public boolean isEnrollableFor(Account account) { // 참가 가능
         return isNotClosed() && !isAlreadyEnrolled(account);
     }
@@ -58,12 +70,12 @@ public class Event { // 이벤트(파티)
         return isNotClosed() && isAlreadyEnrolled(account);
     }
 
-    public boolean canEnrollment() {
-        return isNotClosed() && this.startDateTime.isBefore(LocalDateTime.now());
+    public LocalDateTime getEnrollmentTime() { // 파티 신청 마감 일
+        return this.startDateTime.minusDays(1); // 파티 시작 1일 전
     }
 
-    private boolean isNotClosed() {
-        return this.endDateTime.isAfter(LocalDateTime.now());
+    public boolean isNotClosed() {
+        return getEnrollmentTime().isAfter(LocalDateTime.now());
     }
 
     public int numberOfRemainSpots() {
@@ -154,6 +166,14 @@ public class Event { // 이벤트(파티)
         if (this.eventType == EventType.CONFIRMATIVE) {
             enrollment.setAccepted(false);
         }
+    }
+
+    public void addMember() {
+        this.memberCount++;
+    }
+
+    public void removeMember() {
+        this.memberCount--;
     }
 
 }
