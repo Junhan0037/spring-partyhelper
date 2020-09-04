@@ -4,12 +4,17 @@ import com.partyhelper.modules.event.domain.Event;
 import com.partyhelper.modules.event.domain.QEvent;
 import com.partyhelper.modules.settings.domain.QTag;
 import com.partyhelper.modules.settings.domain.QZone;
+import com.partyhelper.modules.settings.domain.Tag;
+import com.partyhelper.modules.settings.domain.Zone;
 import com.querydsl.core.QueryResults;
 import com.querydsl.jpa.JPQLQuery;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.support.QuerydslRepositorySupport;
+
+import java.util.List;
+import java.util.Set;
 
 public class EventRepositoryExtensionImpl extends QuerydslRepositorySupport implements EventRepositoryExtension {
 
@@ -30,6 +35,19 @@ public class EventRepositoryExtensionImpl extends QuerydslRepositorySupport impl
         JPQLQuery<Event> pageableQuery = getQuerydsl().applyPagination(pageable, query);
         QueryResults<Event> fetchResults = pageableQuery.fetchResults();
         return new PageImpl<>(fetchResults.getResults(), pageable, fetchResults.getTotal());
+    }
+
+    @Override
+    public List<Event> findByAccount(Set<Tag> tags, Set<Zone> zones) {
+        QEvent event = QEvent.event;
+        JPQLQuery<Event> query = from(event).where(event.tags.any().in(tags)
+                .and(event.zones.any().in(zones)))
+                .leftJoin(event.tags, QTag.tag).fetchJoin()
+                .leftJoin(event.zones, QZone.zone).fetchJoin()
+                .orderBy(event.startDateTime.asc())
+                .distinct()
+                .limit(9);
+        return query.fetch();
     }
 
 }

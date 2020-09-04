@@ -154,7 +154,7 @@ public class SettingsController {
         model.addAttribute("tags", tags.stream().map(Tag::getTitle).collect(Collectors.toList())); // 태그 목록을 List형태로 변환
 
         List<String> allTags = tagRepository.findAll().stream().map(Tag::getTitle).collect(Collectors.toList()); // 자동완성 목록
-        model.addAttribute("whitelist", objectMapper.writeValueAsString(allTags)); // 자동완성 목록을 JSON형태로 변환
+        model.addAttribute("taglist", objectMapper.writeValueAsString(allTags)); // 자동완성 목록을 JSON형태로 변환
 
         return SETTINGS + TAGS;
     }
@@ -189,7 +189,7 @@ public class SettingsController {
         model.addAttribute("zones", zones.stream().map(Zone::toString).collect(Collectors.toList()));
 
         List<String> allZones = zoneRepository.findAll().stream().map(Zone::toString).collect(Collectors.toList());
-        model.addAttribute("whitelist", objectMapper.writeValueAsString(allZones));
+        model.addAttribute("zonelist", objectMapper.writeValueAsString(allZones));
 
         return SETTINGS + ZONES;
     }

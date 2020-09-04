@@ -81,12 +81,12 @@ public class EventService {
         event.getZones().remove(zone);
     }
 
-    public void addMember(Event event) {
-        event.addMember();
+    public void addMember(Event event, Account account) {
+        event.addMember(account);
     }
 
-    public void removeMember(Event event) {
-        event.removeMember();
+    public void removeMember(Event event, Account account) {
+        event.removeMember(account);
     }
 
 }

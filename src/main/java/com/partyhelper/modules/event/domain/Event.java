@@ -48,6 +48,9 @@ public class Event { // 이벤트(파티)
     @OrderBy("enrolledAt")
     private List<Enrollment> enrollments = new ArrayList<>(); // 참가 업체
 
+    @ManyToMany
+    private Set<Account> members = new HashSet<>();
+
     @Enumerated(EnumType.STRING)
     private EventType eventType; // 선착순, 이용자 선택
 
@@ -168,11 +171,13 @@ public class Event { // 이벤트(파티)
         }
     }
 
-    public void addMember() {
+    public void addMember(Account account) {
+        this.getMembers().add(account);
         this.memberCount++;
     }
 
-    public void removeMember() {
+    public void removeMember(Account account) {
+        this.getMembers().remove(account);
         this.memberCount--;
     }
 

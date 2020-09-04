@@ -544,7 +544,7 @@
 
 <div th:fragment="event-list (eventList)" class="col-sm-12">
     <div class="row">
-        <div class="col-md-4" th:each="event: ${eventList}">
+        <div class="col-md-4" th:if="${event.isNotClosed()}" th:each="event: ${eventList}">
             <div class="card mb-4 shadow-sm">
 <!--                <img th:src="${study.image}" class="card-img-top" th:alt="${study.title}" >-->
                 <div class="card-body">
@@ -554,12 +554,12 @@
 <!--                    <p class="card-text" th:text="${event.shortDescription}">Short description</p>-->
                     <p class="card-text context">
                                 <span th:each="tag: ${event.tags}" class="font-weight-light text-monospace badge badge-pill badge-info mr-3">
-                                    <a th:href="@{'/search/tag/' + ${tag.title}}" class="text-decoration-none text-white">
+                                    <a th:href="@{'/search/event?keyword=' + ${tag.title}}" class="text-decoration-none text-white">
                                         <i class="fa fa-tag"></i> <span th:text="${tag.title}">Tag</span>
                                     </a>
                                 </span>
                         <span th:each="zone: ${event.zones}" class="font-weight-light text-monospace badge badge-primary mr-3">
-                                    <a th:href="@{'/search/zone/' + ${zone.id}}" class="text-decoration-none text-white">
+                                    <a th:href="@{'/search/event?keyword=' + ${zone.localNameOfCity}}" class="text-decoration-none text-white">
                                         <i class="fa fa-globe"></i> <span th:text="${zone.localNameOfCity}" class="text-white">City</span>
                                     </a>
                                 </span>

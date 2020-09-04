@@ -19,8 +19,8 @@
             </button>
             <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
                 <a class="dropdown-item" th:classappend="${#strings.equals(sortProperty, 'startDateTime')}? active"
-                   th:href="@{'/search/event?sort=startDateTime,desc&keyword=' + ${keyword}}">
-                    파티 공개일
+                   th:href="@{'/search/event?sort=startDateTime&keyword=' + ${keyword}}">
+                    파티 시작일
                 </a>
                 <a class="dropdown-item" th:classappend="${#strings.equals(sortProperty, 'memberCount')}? active"
                    th:href="@{'/search/event?sort=memberCount,desc&keyword=' + ${keyword}}">

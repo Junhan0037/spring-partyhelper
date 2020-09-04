@@ -164,7 +164,7 @@ public class EventController {
     @PostMapping("/event/{path}/enroll")
     public String newEnrollment(@CurrentAccount Account account, @PathVariable String path) { // 참가 신청
         Event event = eventRepository.findByPath(path);
-        eventService.addMember(event);
+        eventService.addMember(event, account);
         eventService.newEnrollment(event, account);
         return "redirect:/event/" + event.getPath();
     }
@@ -172,7 +172,7 @@ public class EventController {
     @PostMapping("/event/{path}/disenroll")
     public String cancelEnrollment(@CurrentAccount Account account, @PathVariable String path) { // 참가 취소
         Event event = eventRepository.findByPath(path);
-        eventService.removeMember(event);
+        eventService.removeMember(event, account);
         eventService.cancelEnrollment(event, account);
         return "redirect:/event/" + event.getPath();
     }
