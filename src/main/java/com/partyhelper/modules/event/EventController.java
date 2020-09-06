@@ -74,6 +74,7 @@ public class EventController {
         Event event = eventRepository.findByPath(path);
         model.addAttribute(account);
         model.addAttribute(event);
+        model.addAttribute("enrollmentSize", eventService.getEnrollmentSize(event));
 
         model.addAttribute("tags", event.getTags().stream().map(Tag::getTitle).collect(Collectors.toList()));
         List<String>allTagTitles = tagRepository.findAll().stream().map(Tag::getTitle).collect(Collectors.toList());
@@ -164,7 +165,7 @@ public class EventController {
     @PostMapping("/event/{path}/enroll")
     public String newEnrollment(@CurrentAccount Account account, @PathVariable String path) { // 참가 신청
         Event event = eventRepository.findByPath(path);
-        eventService.addMember(event, account);
+//        eventService.addMember(event, account);
         eventService.newEnrollment(event, account);
         return "redirect:/event/" + event.getPath();
     }
@@ -172,7 +173,7 @@ public class EventController {
     @PostMapping("/event/{path}/disenroll")
     public String cancelEnrollment(@CurrentAccount Account account, @PathVariable String path) { // 참가 취소
         Event event = eventRepository.findByPath(path);
-        eventService.removeMember(event, account);
+//        eventService.removeMember(event, account);
         eventService.cancelEnrollment(event, account);
         return "redirect:/event/" + event.getPath();
     }

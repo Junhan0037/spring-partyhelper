@@ -1,6 +1,9 @@
 package com.partyhelper.modules.event;
 
+import com.partyhelper.modules.account.domain.Account;
+import com.partyhelper.modules.event.domain.Enrollment;
 import com.partyhelper.modules.event.domain.Event;
+import com.partyhelper.modules.event.domain.QEnrollment;
 import com.partyhelper.modules.event.domain.QEvent;
 import com.partyhelper.modules.settings.domain.QTag;
 import com.partyhelper.modules.settings.domain.QZone;
@@ -38,16 +41,65 @@ public class EventRepositoryExtensionImpl extends QuerydslRepositorySupport impl
     }
 
     @Override
-    public List<Event> findByAccount(Set<Tag> tags, Set<Zone> zones) {
+    public List<Event> findByTag(Set<Tag> tags) {
         QEvent event = QEvent.event;
-        JPQLQuery<Event> query = from(event).where(event.tags.any().in(tags)
-                .and(event.zones.any().in(zones)))
+        JPQLQuery<Event> query = from(event).where(
+                event.tags.any().in(tags))
                 .leftJoin(event.tags, QTag.tag).fetchJoin()
+                .orderBy(event.startDateTime.asc())
+                .distinct()
+                .limit(9);
+        return query.fetch();
+    }
+
+    @Override
+    public List<Event> findByZone(Set<Zone> zones) {
+        QEvent event = QEvent.event;
+        JPQLQuery<Event> query = from(event).where(
+                event.zones.any().in(zones))
                 .leftJoin(event.zones, QZone.zone).fetchJoin()
                 .orderBy(event.startDateTime.asc())
                 .distinct()
                 .limit(9);
         return query.fetch();
     }
+
+    @Override
+    public List<Event> findByEnrolledEvent(Account account, Set<Enrollment> enrollments) {
+        QEvent event = QEvent.event;
+        JPQLQuery<Event> query = from(event).where(
+                event.enrollments.any().in(enrollments)
+                .and(event.createdBy.eq(account)))
+                .leftJoin(event.enrollments, QEnrollment.enrollment).fetchJoin()
+                .orderBy(event.startDateTime.asc())
+                .distinct()
+                .limit(9);
+        return query.fetch();
+    }
+
+    @Override
+    public List<Event> findByEnrollingEvent(Set<Enrollment> enrollments) {
+        QEvent event = QEvent.event;
+        JPQLQuery<Event> query = from(event).where(
+                event.enrollments.any().in(enrollments))
+                .leftJoin(event.enrollments, QEnrollment.enrollment).fetchJoin()
+                .orderBy(event.startDateTime.asc())
+                .distinct()
+                .limit(9);
+        return query.fetch();
+    }
+
+    //    @Override
+//    public List<Event> findByAccount(Set<Tag> tags, Set<Zone> zones) {
+//        QEvent event = QEvent.event;
+//        JPQLQuery<Event> query = from(event).where(event.tags.any().in(tags)
+//                .and(event.zones.any().in(zones)))
+//                .leftJoin(event.tags, QTag.tag).fetchJoin()
+//                .leftJoin(event.zones, QZone.zone).fetchJoin()
+//                .orderBy(event.startDateTime.asc())
+//                .distinct()
+//                .limit(9);
+//        return query.fetch();
+//    }
 
 }

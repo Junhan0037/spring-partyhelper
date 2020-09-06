@@ -89,4 +89,8 @@ public class EventService {
         event.removeMember(account);
     }
 
+    public int getEnrollmentSize(Event event) {
+        return event.getEnrollments().size();
+    }
+
 }

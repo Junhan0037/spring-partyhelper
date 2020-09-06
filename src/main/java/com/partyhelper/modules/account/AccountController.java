@@ -37,11 +37,6 @@ public class AccountController {
         return "account/login-user";
     }
 
-    @GetMapping("/login-provider")
-    public String loginProviderForm() {
-        return "account/login-provider";
-    }
-
     @GetMapping("/sign-up")
     public String signUpForm() {
         return "account/sign-up";

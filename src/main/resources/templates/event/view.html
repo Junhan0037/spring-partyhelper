@@ -124,12 +124,12 @@
                 <hr>
             </div>
 
-            <dt class="font-weight-light">이벤트 참가 업체 (<span th:text="${event.enrollments.size()}"></span>)</dt>
+            <dt class="font-weight-light">이벤트 참가 업체 (<span th:text="${enrollmentSize}"></span>)</dt>
             <dd>
-                <div th:if="${event.enrollments.size() == 0}" class="col">
+                <div th:if="${enrollmentSize == 0}" class="col">
                     새 모임이 없습니다.
                 </div>
-                <table class="table table-borderless table-sm" th:if="${event.enrollments.size() > 0}">
+                <table class="table table-borderless table-sm" th:if="${enrollmentSize > 0}">
                     <thead>
                     <tr>
                         <th scope="col">#</th>
@@ -145,7 +145,7 @@
                     <tr th:each="enroll: ${event.enrollments}">
                         <th scope="row" th:text="${enrollStat.count}"></th>
                         <td>
-                            <a th:href="@{'/profile/' + ${enroll.account.nickname}}"
+                            <a th:href="@{'/profile/' + ${enroll.account.email}}"
                                class="text-decoration-none">
                                 <svg th:if="${#strings.isEmpty(enroll.account?.profileImage)}" data-jdenticon-value="nickname"
                                      th:data-jdenticon-value="${enroll.account.nickname}" width="24" height="24" class="rounded border bg-light"></svg>

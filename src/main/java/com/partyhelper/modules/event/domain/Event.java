@@ -4,9 +4,8 @@ import com.partyhelper.modules.account.domain.Account;
 import com.partyhelper.modules.event.EventType;
 import com.partyhelper.modules.settings.domain.Tag;
 import com.partyhelper.modules.settings.domain.Zone;
-import lombok.EqualsAndHashCode;
-import lombok.Getter;
-import lombok.Setter;
+import lombok.*;
+import org.springframework.transaction.annotation.Transactional;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
@@ -18,6 +17,7 @@ import java.util.stream.Collectors;
 
 @Entity
 @Getter @Setter @EqualsAndHashCode(of = "id")
+@Builder @AllArgsConstructor @NoArgsConstructor
 public class Event { // 이벤트(파티)
 
     @Id @GeneratedValue
@@ -177,8 +177,13 @@ public class Event { // 이벤트(파티)
     }
 
     public void removeMember(Account account) {
-        this.getMembers().remove(account);
+        this.getMembers().remove(account); // 안없어짐..
         this.memberCount--;
+        System.out.println("============================================");
+        for (Account member : this.members) {
+            System.out.println(member.getId());
+        }
+        System.out.println("============================================");
     }
 
 }

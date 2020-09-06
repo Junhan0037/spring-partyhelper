@@ -40,11 +40,36 @@
         <div class="col-md-9">
             <div th:if="${account.role != T(com.partyhelper.modules.account.Role).PROVIDER}">
                 <h5 class="font-weight-light" th:if="${#lists.isEmpty(eventManagerOf)}">관리중인 파티가 없습니다.</h5>
-                <h5 class="font-weight-light" th:if="${!#lists.isEmpty(eventManagerOf)}">관리중인 파티</h5>
+                <h5 class="font-weight-light" th:if="${!#lists.isEmpty(eventManagerOf)}">My 파티</h5>
                 <div class="row justify-content-center">
                     <div th:replace="fragments.html :: event-list (eventList=${eventManagerOf})"></div>
                 </div>
+                <hr>
             </div>
+
+            <div th:if="${account.role != T(com.partyhelper.modules.account.Role).PROVIDER}">
+                <h5 th:if="${#lists.isEmpty(enrollmentEvent)}" class="font-weight-light">업체가 확정된 파티가 없습니다.</h5>
+                <h5 th:if="${!#lists.isEmpty(enrollmentEvent)}" class="font-weight-light">업체가 확정된 파티</h5>
+                <div class="row row-cols-1 row-cols-md-2" th:if="${!#lists.isEmpty(enrollmentEvent)}">
+                    <div class="col mb-4" th:each="event: ${enrollmentEvent}">
+                        <div class="card">
+                            <div class="card-body">
+                                <h5 class="card-title" th:text="${event.title}">Event title</h5>
+<!--                                <h6 class="card-subtitle mb-2 text-muted" th:text="${enrollment.event.title}">Event title</h6>-->
+                                <p class="card-text">
+                                <span>
+                                    <i class="fa fa-calendar-o"></i>
+                                    <span class="date" th:text="${event.startDateTime}">Last updated 3 mins ago</span>
+                                </span>
+                                </p>
+                                <a th:href="@{'/event/' + ${event.path}}" class="card-link">파티 조회</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <hr>
+            </div>
+
             <div th:if="${account.role == T(com.partyhelper.modules.account.Role).PROVIDER}">
                 <h5 th:if="${#lists.isEmpty(enrollmentList)}" class="font-weight-light">업체로 확정된 파티가 없습니다.</h5>
                 <h5 th:if="${!#lists.isEmpty(enrollmentList)}" class="font-weight-light">업체로 확정된 파티</h5>
@@ -53,7 +78,7 @@
                         <div class="card">
                             <div class="card-body">
                                 <h5 class="card-title" th:text="${enrollment.event.title}">Event title</h5>
-                                <!--                            <h6 class="card-subtitle mb-2 text-muted" th:text="${enrollment.event.title}">Event title</h6>-->
+<!--                                <h6 class="card-subtitle mb-2 text-muted" th:text="${enrollment.event.title}">Event title</h6>-->
                                 <p class="card-text">
                                 <span>
                                     <i class="fa fa-calendar-o"></i>
@@ -65,19 +90,26 @@
                         </div>
                     </div>
                 </div>
+                <hr>
             </div>
             <div th:if="${account.role == T(com.partyhelper.modules.account.Role).PROVIDER}">
-                <h5 class="font-weight-light" th:if="${#lists.isEmpty(eventMemberOf)}">지원중인 파티가 없습니다.</h5>
-                <h5 class="font-weight-light" th:if="${!#lists.isEmpty(eventMemberOf)}">지원중인 파티</h5>
+                <h5 class="font-weight-light" th:if="${#lists.isEmpty(enrollingEvent)}">업체로 지원중인 파티가 없습니다.</h5>
+                <h5 class="font-weight-light" th:if="${!#lists.isEmpty(enrollingEvent)}">업체로 지원중인 파티</h5>
                 <div class="row justify-content-center">
-                    <div th:replace="fragments.html :: event-list (eventList=${eventMemberOf})"></div>
+                    <div th:replace="fragments.html :: event-list (eventList=${enrollingEvent})"></div>
                 </div>
+                <hr>
+            </div>
+            <h5 class="font-weight-light" th:if="${#lists.isEmpty(tagEventList)}">태그 관련 주제 파티가 없습니다.</h5>
+            <h5 class="font-weight-light" th:if="${!#lists.isEmpty(tagEventList)}">태그 관련 주제 파티</h5>
+            <div class="row justify-content-center">
+                <div th:replace="fragments.html :: event-list (eventList=${tagEventList})"></div>
             </div>
             <hr>
-            <h5 class="font-weight-light" th:if="${#lists.isEmpty(eventList)}">관련 파티가 없습니다.</h5>
-            <h5 class="font-weight-light" th:if="${!#lists.isEmpty(eventList)}">주요 활동 지역의 관심 주제 파티</h5>
+            <h5 class="font-weight-light" th:if="${#lists.isEmpty(zoneEventList)}">주요 활동 지역의 파티가 없습니다.</h5>
+            <h5 class="font-weight-light" th:if="${!#lists.isEmpty(zoneEventList)}">주요 활동 지역의 파티</h5>
             <div class="row justify-content-center">
-                <div th:replace="fragments.html :: event-list (eventList=${eventList})"></div>
+                <div th:replace="fragments.html :: event-list (eventList=${zoneEventList})"></div>
             </div>
         </div>
     </div>
