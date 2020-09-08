@@ -1,12 +1,16 @@
 package com.partyhelper.modules.account;
 
 import com.partyhelper.modules.account.domain.Account;
+import com.partyhelper.modules.event.domain.Enrollment;
 import org.springframework.data.jpa.repository.EntityGraph;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.querydsl.QuerydslPredicateExecutor;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.Set;
+
 @Transactional(readOnly = true)
-public interface AccountRepository extends JpaRepository<Account, Long> {
+public interface AccountRepository extends JpaRepository<Account, Long>, QuerydslPredicateExecutor<Account> {
 
     boolean existsByEmail(String email);
 

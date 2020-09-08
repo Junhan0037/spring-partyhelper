@@ -17,8 +17,8 @@
 </section>
 <div class="container">
     <div class="row justify-content-center pt-3">
-        <h5 class="font-weight-light mt-3 mb-3" th:if="${#lists.isEmpty(eventList)}">주요 활동 지역의 관련 파티가 없습니다.</h5>
-        <h5 class="font-weight-light mt-3 mb-3" th:if="${!#lists.isEmpty(eventList)}">시작일 기준 생성된 파티</h5>
+        <h5 class="font-weight-light mt-3 mb-3" th:if="${#lists.isEmpty(eventList)}">생성된 파티가 없습니다.</h5>
+        <h5 class="font-weight-light mt-3 mb-3" th:if="${!#lists.isEmpty(eventList)}">최근 생성된 파티</h5>
         <div th:replace="fragments.html :: event-list (eventList=${eventList})"></div>
     </div>
 </div>

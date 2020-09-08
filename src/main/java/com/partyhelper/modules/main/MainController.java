@@ -47,14 +47,12 @@ public class MainController {
             model.addAttribute("eventManagerOf",
                     eventRepository.findFirst5ByCreatedByOrderByStartDateTime(account)); // 관리중인 이벤트 (사용자)
 
-
-//            model.addAttribute("enrollmentAccountOf", enrollmentRepository.findFirst5ByAccountOrderByEnrolledAtDesc(account)); // 업체로 지원중인 이벤트 (업체)
             Set<Enrollment> newEnrollingList  = enrollmentRepository.findByAccountOrderByEnrolledAtDesc(account);
             model.addAttribute("enrollingEvent", eventRepository.findByEnrollingEvent(newEnrollingList));
 
-
             return "index-after-login";
         }
+
         model.addAttribute("eventList", eventRepository.findFirst9ByOrderByStartDateTime());
         return "index";
     }

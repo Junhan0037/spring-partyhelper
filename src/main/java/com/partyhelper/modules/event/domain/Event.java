@@ -8,6 +8,8 @@ import lombok.*;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.persistence.*;
+import java.net.URLEncoder;
+import java.nio.charset.StandardCharsets;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.HashSet;
@@ -184,6 +186,10 @@ public class Event { // 이벤트(파티)
             System.out.println(member.getId());
         }
         System.out.println("============================================");
+    }
+
+    public String getEncodedPath() {
+        return URLEncoder.encode(this.path, StandardCharsets.UTF_8);
     }
 
 }

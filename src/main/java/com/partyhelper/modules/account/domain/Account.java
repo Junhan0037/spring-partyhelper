@@ -68,17 +68,21 @@ public class Account extends BaseTimeEntity {
     @Basic(fetch = FetchType.EAGER)
     private String profileImage;
 
-    private boolean studyCreatedByEmail;
+    private boolean eventCreatedByEmail;
 
-    private boolean studyCreatedByWeb = true;
+    private boolean eventCreatedByWeb = true;
 
-    private boolean studyEnrollmentResultByEmail;
+    private boolean eventEnrollmentResultByEmail;
 
-    private boolean studyEnrollmentResultByWeb = true;
+    private boolean eventEnrollmentResultByWeb = true;
 
-    private boolean studyUpdatedByEmail;
+    private boolean eventUpdatedByEmail;
 
-    private boolean studyUpdatedByWeb = true;
+    private boolean eventUpdatedByWeb = true;
+
+    private boolean eventExistingEnrollmentByEmail;
+
+    private boolean eventExistingEnrollmentByWeb = true;
 
     @ManyToMany
     private Set<Tag> tags = new HashSet<>();

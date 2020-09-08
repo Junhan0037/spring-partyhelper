@@ -7,6 +7,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.Set;
 
 @Transactional(readOnly = true)
 public interface EventRepository extends JpaRepository<Event, Long>, EventRepositoryExtension {
@@ -19,5 +20,10 @@ public interface EventRepository extends JpaRepository<Event, Long>, EventReposi
     List<Event> findFirst5ByCreatedByOrderByStartDateTime(Account account);
 
     List<Event> findFirst5ByMembersContainingOrderByStartDateTime(Account account);
+
+    @EntityGraph(attributePaths = {"tags", "zones"})
+    Event findEventWithTagsAndZonesById(Long id);
+
+    Event findEventById(Long id);
 
 }

@@ -11,7 +11,6 @@ import com.partyhelper.modules.event.validator.EventValidator;
 import com.partyhelper.modules.settings.TagRepository;
 import com.partyhelper.modules.settings.TagService;
 import com.partyhelper.modules.settings.ZoneRepository;
-import com.partyhelper.modules.settings.ZoneService;
 import com.partyhelper.modules.settings.domain.Tag;
 import com.partyhelper.modules.settings.domain.Zone;
 import com.partyhelper.modules.settings.form.TagForm;
@@ -26,8 +25,6 @@ import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
-import java.net.URLEncoder;
-import java.nio.charset.StandardCharsets;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -42,7 +39,6 @@ public class EventController {
     private final TagRepository tagRepository;
     private final TagService tagService;
     private final ZoneRepository zoneRepository;
-    private final ZoneService zoneService;
     private final ObjectMapper objectMapper;
 
     @InitBinder("eventform")
@@ -66,7 +62,7 @@ public class EventController {
         }
 
         Event event = eventService.createEvent(modelMapper.map(eventForm, Event.class), account);
-        return "redirect:/event/" + URLEncoder.encode(event.getPath(), StandardCharsets.UTF_8);
+        return "redirect:/event/" + event.getEncodedPath();
     }
 
     @GetMapping("/event/{path}")
@@ -92,6 +88,7 @@ public class EventController {
         Event event = eventRepository.findByPath(path);
         Tag tag = tagService.findOrCreateNew(tagForm.getTagTitle());
         eventService.addTag(event, tag);
+        eventService.addNotification(event); // 스터디 개설 알림
         return ResponseEntity.ok().build();
     }
 
@@ -104,6 +101,7 @@ public class EventController {
             return ResponseEntity.badRequest().build();
         }
         eventService.removeTag(event, tag);
+        eventService.addNotification(event); // 스터디 개설 알림
         return ResponseEntity.ok().build();
     }
 
@@ -115,6 +113,7 @@ public class EventController {
             return ResponseEntity.badRequest().build();
         }
         eventService.addZone(event, zone);
+        eventService.addNotification(event); // 스터디 개설 알림
         return ResponseEntity.ok().build();
     }
 
@@ -126,6 +125,7 @@ public class EventController {
             return ResponseEntity.badRequest().build();
         }
         eventService.removeZone(event, zone);
+        eventService.addNotification(event); // 스터디 개설 알림
         return ResponseEntity.ok().build();
     }
 
@@ -152,7 +152,7 @@ public class EventController {
         }
 
         eventService.updateEvent(event, eventForm);
-        return "redirect:/event/" + event.getPath();
+        return "redirect:/event/" + event.getEncodedPath();
     }
 
     @PostMapping("/event/{path}/delete")
@@ -167,7 +167,7 @@ public class EventController {
         Event event = eventRepository.findByPath(path);
 //        eventService.addMember(event, account);
         eventService.newEnrollment(event, account);
-        return "redirect:/event/" + event.getPath();
+        return "redirect:/event/" + event.getEncodedPath();
     }
 
     @PostMapping("/event/{path}/disenroll")
@@ -175,21 +175,21 @@ public class EventController {
         Event event = eventRepository.findByPath(path);
 //        eventService.removeMember(event, account);
         eventService.cancelEnrollment(event, account);
-        return "redirect:/event/" + event.getPath();
+        return "redirect:/event/" + event.getEncodedPath();
     }
 
     @PostMapping("/event/{path}/enrollment/{enrollmentId}/accept")
     public String acceptEnrollment(@CurrentAccount Account account, @PathVariable String path, @PathVariable("enrollmentId") Enrollment enrollment) {
         Event event = eventRepository.findByPath(path);
         eventService.acceptEnrollment(event, enrollment);
-        return "redirect:/event/" + event.getPath();
+        return "redirect:/event/" + event.getEncodedPath();
     }
 
     @PostMapping("/event/{path}/enrollment/{enrollmentId}/reject")
     public String rejectEnrollment(@CurrentAccount Account account, @PathVariable String path, @PathVariable("enrollmentId") Enrollment enrollment) {
         Event event = eventRepository.findByPath(path);
         eventService.rejectEnrollment(event, enrollment);
-        return "redirect:/event/" + event.getPath();
+        return "redirect:/event/" + event.getEncodedPath();
     }
 
 

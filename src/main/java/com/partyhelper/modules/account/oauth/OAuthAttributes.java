@@ -56,9 +56,10 @@ public class OAuthAttributes {
                 .picture(picture)
                 .role(Role.OAUTH) // 가입할 때의 기본 권한을 USER로 준다.
                 .emailVerified(true)
-                .studyCreatedByWeb(true)
-                .studyEnrollmentResultByWeb(true)
-                .studyUpdatedByWeb(true)
+                .eventCreatedByWeb(true)
+                .eventEnrollmentResultByWeb(true)
+                .eventUpdatedByWeb(true)
+                .eventEnrollmentResultByWeb(true)
                 .build();
     }
 

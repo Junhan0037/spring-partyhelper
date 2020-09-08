@@ -89,7 +89,8 @@
             <dd th:utext="${event.description}"></dd>
             <hr>
 
-            <div th:if="${event.isManager(account)}">
+            <dt class="font-weight-light">태그 & 지역</dt>
+            <div th:if="${event.isManager(account) && event.isNotClosed()}">
                 <div class="row">
                     <div class="col-8">
                         <dt class="font-weight-light">태그를 등록하세요. 태그를 입력하고 콤마(,) 또는 엔터를 입력하세요.</dt>
@@ -126,9 +127,9 @@
 
             <dt class="font-weight-light">이벤트 참가 업체 (<span th:text="${enrollmentSize}"></span>)</dt>
             <dd>
-                <div th:if="${enrollmentSize == 0}" class="col">
-                    새 모임이 없습니다.
-                </div>
+                <dd th:if="${enrollmentSize == 0}" class="col pl-0">
+                    참가 신청한 업체가 없습니다.
+                </dd>
                 <table class="table table-borderless table-sm" th:if="${enrollmentSize > 0}">
                     <thead>
                     <tr>

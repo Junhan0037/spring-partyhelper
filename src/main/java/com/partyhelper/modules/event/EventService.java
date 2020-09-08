@@ -3,11 +3,13 @@ package com.partyhelper.modules.event;
 import com.partyhelper.modules.account.domain.Account;
 import com.partyhelper.modules.event.domain.Enrollment;
 import com.partyhelper.modules.event.domain.Event;
+import com.partyhelper.modules.event.event.*;
 import com.partyhelper.modules.event.form.EventForm;
 import com.partyhelper.modules.settings.domain.Tag;
 import com.partyhelper.modules.settings.domain.Zone;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
+import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -21,6 +23,11 @@ public class EventService {
     private final EventRepository eventRepository;
     private final ModelMapper modelMapper;
     private final EnrollmentRepository enrollmentRepository;
+    private final ApplicationEventPublisher eventPublisher;
+
+    public void addNotification(Event event) {
+        eventPublisher.publishEvent(new EventCreatedEvent(event));
+    }
 
     public Event createEvent(Event event, Account account) {
         event.setCreatedBy(account);
@@ -30,10 +37,11 @@ public class EventService {
     public void updateEvent(Event event, EventForm eventForm) {
         modelMapper.map(eventForm, event);
         event.acceptWaitingList(); // 모집인원을 늘릴 경우, 자동으로 대기 인원을 확정 상태로 변경해야한다.
-//        eventPublisher.publishEvent(new StudyUpdateEvent(event.getStudy(), "'" + event.getTitle() + "' 모임 정보를 수정했으니 확인하세요."));
+        eventPublisher.publishEvent(new EventUpdateEvent(event, "해당 파티를 수정했습니다."));
     }
 
     public void deleteEvent(Event event) {
+        eventPublisher.publishEvent(new EventUpdateEvent(event, "해당 파티를 취소했습니다."));
         eventRepository.delete(event);
     }
 
@@ -45,6 +53,11 @@ public class EventService {
             enrollment.setAccount(account);
             event.addEnrollment(enrollment);
             enrollmentRepository.save(enrollment);
+
+            eventPublisher.publishEvent(new EnrollmentExistingEvent(enrollment));
+            if (enrollment.isAccepted()) { // 선착순으로 바로 확정되었을 시
+                eventPublisher.publishEvent(new EnrollmentAcceptedEvent(enrollment));
+            }
         }
     }
 
@@ -57,12 +70,12 @@ public class EventService {
 
     public void acceptEnrollment(Event event, Enrollment enrollment) {
         event.accept(enrollment);
-//        eventPublisher.publishEvent(new EnrollmentAcceptedEvent(enrollment));
+        eventPublisher.publishEvent(new EnrollmentAcceptedEvent(enrollment));
     }
 
     public void rejectEnrollment(Event event, Enrollment enrollment) {
         event.reject(enrollment);
-//        eventPublisher.publishEvent(new EnrollmentRejectedEvent(enrollment));
+        eventPublisher.publishEvent(new EnrollmentRejectedEvent(enrollment));
     }
 
     public void addTag(Event event, Tag tag) {
