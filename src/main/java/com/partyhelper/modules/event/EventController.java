@@ -50,6 +50,10 @@ public class EventController {
 
     @GetMapping("/new-event")
     public String newEventForm(@CurrentAccount Account account, Model model) {
+        if (!account.isEmailVerified()) {
+            model.addAttribute(account);
+            return "/account/check-email";
+        }
         if (account.getRole().equals(PROVIDER)) {
             return "/error";
         }
@@ -71,6 +75,10 @@ public class EventController {
 
     @GetMapping("/event/{path}")
     public String getEvent(@CurrentAccount Account account, @PathVariable String path, Model model) throws JsonProcessingException {
+        if (!account.isEmailVerified()) {
+            model.addAttribute(account);
+            return "/account/check-email";
+        }
         Event event = eventRepository.findByPath(path);
         model.addAttribute(account);
         model.addAttribute(event);

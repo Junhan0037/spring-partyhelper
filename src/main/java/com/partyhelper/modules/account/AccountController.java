@@ -82,16 +82,19 @@ public class AccountController {
         String view = "account/checked-email";
 
         if (account == null) {
+            model.addAttribute(account);
             model.addAttribute("error", "wrong.email");
             return view;
         }
 
         if (!account.isValidToken(token)) {
+            model.addAttribute(account);
             model.addAttribute("error", "wrong.token");
             return view;
         }
 
         accountService.completeSignUp(account);
+        model.addAttribute(account);
         model.addAttribute("numberOfUser", accountRepository.count());
         model.addAttribute("nickname", account.getNickname());
         return view;

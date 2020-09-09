@@ -70,19 +70,19 @@ public class Account extends BaseTimeEntity {
 
     private boolean eventCreatedByEmail;
 
-    private boolean eventCreatedByWeb = true;
+    private boolean eventCreatedByWeb;
 
     private boolean eventEnrollmentResultByEmail;
 
-    private boolean eventEnrollmentResultByWeb = true;
+    private boolean eventEnrollmentResultByWeb;
 
     private boolean eventUpdatedByEmail;
 
-    private boolean eventUpdatedByWeb = true;
+    private boolean eventUpdatedByWeb;
 
     private boolean eventExistingEnrollmentByEmail;
 
-    private boolean eventExistingEnrollmentByWeb = true;
+    private boolean eventExistingEnrollmentByWeb;
 
     @ManyToMany
     private Set<Tag> tags = new HashSet<>();

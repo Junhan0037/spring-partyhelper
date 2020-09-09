@@ -12,21 +12,30 @@ import org.springframework.web.servlet.view.RedirectView;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 
 @Component
 @RequiredArgsConstructor
 public class NotificationInterceptor implements HandlerInterceptor {
 
     private final NotificationRepository notificationRepository;
+    private final HttpSession httpSession;
 
     @Override
     public void postHandle(HttpServletRequest request, HttpServletResponse response, Object handler, ModelAndView modelAndView) throws Exception {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        if (modelAndView != null && !isRedirectView(modelAndView) && authentication != null && authentication.getPrincipal() instanceof UserAccount) {
-            Account account = ((UserAccount)authentication.getPrincipal()).getAccount();
+
+        if (modelAndView != null && !isRedirectView(modelAndView) && authentication != null && httpSession.getAttribute("account") != null) {
+            Account account = (Account) httpSession.getAttribute("account");
             long count = notificationRepository.countByAccountAndChecked(account, false);
             modelAndView.addObject("hasNotification", count > 0);
         }
+
+//        if (modelAndView != null && !isRedirectView(modelAndView) && authentication != null && authentication.getPrincipal() instanceof UserAccount) {
+//            Account account = ((UserAccount)authentication.getPrincipal()).getAccount();
+//            long count = notificationRepository.countByAccountAndChecked(account, false);
+//            modelAndView.addObject("hasNotification", count > 0);
+//        }
     }
 
     private boolean isRedirectView(ModelAndView modelAndView) {
