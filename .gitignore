@@ -38,3 +38,4 @@ src/main/resources/static/node
 
 application-oauth.properties
 application-dev.properties
+application-original.properties
