@@ -48,18 +48,15 @@ public class OAuthAttributes {
                 .build();
     }
 
-    public Account toEntity() { // User 엔티티를 생성한다.
+    public Account toEntity() {
         return Account.builder()
                 .name(name)
                 .nickname(name)
                 .email(email)
                 .picture(picture)
-                .role(Role.OAUTH) // 가입할 때의 기본 권한을 USER로 준다.
+                .role(Role.OAUTH)
                 .emailVerified(true)
-                .eventCreatedByWeb(true)
-                .eventEnrollmentResultByWeb(true)
-                .eventUpdatedByWeb(true)
-                .eventEnrollmentResultByWeb(true)
+                .eventExistingEnrollmentByWeb(true)
                 .build();
     }
 

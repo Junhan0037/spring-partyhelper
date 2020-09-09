@@ -26,4 +26,6 @@ public interface EventRepository extends JpaRepository<Event, Long>, EventReposi
 
     Event findEventById(Long id);
 
+    boolean existsByPath(String path);
+
 }

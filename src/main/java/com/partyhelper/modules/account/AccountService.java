@@ -62,6 +62,7 @@ public class AccountService implements UserDetailsService {
         signUpForm.setPassword(passwordEncoder.encode(signUpForm.getPassword()));
         signUpForm.setRole(Role.USER);
         Account account = modelMapper.map(signUpForm, Account.class);
+        account.setEventExistingEnrollmentByWeb(true);
         account.generateEmailCheckToken(); // 이메일 확인 토큰 생성
         return accountRepository.save(account);
     }
@@ -70,6 +71,9 @@ public class AccountService implements UserDetailsService {
         signUpForm.setPassword(passwordEncoder.encode(signUpForm.getPassword()));
         signUpForm.setRole(Role.PROVIDER);
         Account account = modelMapper.map(signUpForm, Account.class);
+        account.setEventCreatedByWeb(true);
+        account.setEventEnrollmentResultByWeb(true);
+        account.setEventUpdatedByWeb(true);
         account.generateEmailCheckToken();
         return accountRepository.save(account);
     }

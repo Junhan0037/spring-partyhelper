@@ -28,6 +28,8 @@ import javax.validation.Valid;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import static com.partyhelper.modules.account.Role.PROVIDER;
+
 @Controller
 @RequiredArgsConstructor
 public class EventController {
@@ -41,14 +43,16 @@ public class EventController {
     private final ZoneRepository zoneRepository;
     private final ObjectMapper objectMapper;
 
-    @InitBinder("eventform")
+    @InitBinder("eventForm")
     public void initBinder(WebDataBinder webDataBinder) {
         webDataBinder.addValidators(eventValidator);
     }
 
-
     @GetMapping("/new-event")
     public String newEventForm(@CurrentAccount Account account, Model model) {
+        if (account.getRole().equals(PROVIDER)) {
+            return "/error";
+        }
         model.addAttribute(account);
         model.addAttribute(new EventForm());
         return "event/form";
@@ -132,6 +136,9 @@ public class EventController {
     @GetMapping("/event/{path}/edit")
     public String updateEventForm(@CurrentAccount Account account, @PathVariable String path, Model model) {
         Event event = eventRepository.findByPath(path);
+        if (event.getCreatedBy().getId() != account.getId()) {
+            return "/error";
+        }
         model.addAttribute(event);
         model.addAttribute(account);
         model.addAttribute(modelMapper.map(event, EventForm.class));
