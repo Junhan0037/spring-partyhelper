@@ -21,6 +21,8 @@ public class Account extends BaseTimeEntity {
     @GeneratedValue
     private Long id;
 
+    private LocalDateTime createdDate; // 생성일
+
     private String name;
 
     @Column(unique = true)
