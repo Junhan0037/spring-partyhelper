@@ -14,8 +14,8 @@ import java.time.LocalDateTime;
 @EntityListeners(AuditingEntityListener.class)
 public abstract class BaseTimeEntity {
 
-    @CreatedDate
-    private LocalDateTime createdDate; // 생성일
+//    @CreatedDate
+//    private LocalDateTime createdDate; // 생성일
 
     @LastModifiedDate
     private LocalDateTime lastModifiedDate; // 수정일

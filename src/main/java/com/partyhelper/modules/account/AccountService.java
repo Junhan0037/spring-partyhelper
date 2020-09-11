@@ -28,6 +28,7 @@ import org.thymeleaf.context.Context;
 
 import javax.servlet.http.HttpSession;
 import javax.validation.Valid;
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 import java.util.Set;
@@ -63,6 +64,7 @@ public class AccountService implements UserDetailsService {
         signUpForm.setRole(Role.USER);
         Account account = modelMapper.map(signUpForm, Account.class);
         account.setEventExistingEnrollmentByWeb(true);
+        account.setCreatedDate(LocalDateTime.now());
         account.generateEmailCheckToken(); // 이메일 확인 토큰 생성
         return accountRepository.save(account);
     }
@@ -74,6 +76,7 @@ public class AccountService implements UserDetailsService {
         account.setEventCreatedByWeb(true);
         account.setEventEnrollmentResultByWeb(true);
         account.setEventUpdatedByWeb(true);
+        account.setCreatedDate(LocalDateTime.now());
         account.generateEmailCheckToken();
         return accountRepository.save(account);
     }
