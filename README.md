@@ -1,4 +1,4 @@
-# spring-partyhelper
+# spring-partyhelper [![Build Status](https://travis-ci.org/Junhan0037/spring-partyhelper.svg?branch=master)](https://travis-ci.org/Junhan0037/spring-partyhelper)
 
 파티를 준비하고 도와주는 웹 애플리케이션
 
