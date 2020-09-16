@@ -34,7 +34,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 //                .and()
                     .authorizeRequests() // URL별 권한 관리를 설정하는 옵션의 시작점
                     .antMatchers("/", "/css/**", "/images/**", "/js/**", "/h2-console/**", "/profile", "/login", "/login-user", "/login-provider",
-                            "/sign-up", "/sign-up-user", "/sign-up-provider", "/check-email", "/check-email-token", "/search/event",
+                            "/sign-up", "/sign-up-user", "/sign-up-provider", "/check-email", "/check-email-token", "/search/event", "/nginx",
                             "/email-login", "/check-email-login", "/login-link", "/login-by-email", "/favicon.ico", "/resources/**", "/error").permitAll() // 전체 열람 권한
                     .antMatchers("/settings/account", "/settings/password").hasAnyRole("USER", "PROVIDER", "ADMIN")
                     .antMatchers("/new-event").hasAnyRole("USER", "OAUTH", "ADMIN")
