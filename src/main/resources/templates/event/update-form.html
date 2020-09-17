@@ -4,7 +4,7 @@
 <body class="bg-light">
 <nav th:replace="fragments.html :: main-nav"></nav>
 <div class="container-sm">
-    <div th:replace="fragments.html :: event-form (mode='edit', action='/event/' + ${event.path}+ '/edit')"></div>
+    <div th:replace="fragments.html :: event-update-form (action='/event/' + ${event.path}+ '/edit')"></div>
     <div th:replace="fragments.html :: footer"></div>
 </div>
 <script th:replace="fragments.html :: form-validation"></script>

@@ -5,6 +5,7 @@ import com.partyhelper.modules.event.domain.Enrollment;
 import com.partyhelper.modules.event.domain.Event;
 import com.partyhelper.modules.event.event.*;
 import com.partyhelper.modules.event.form.EventForm;
+import com.partyhelper.modules.event.form.EventUpdateForm;
 import com.partyhelper.modules.settings.domain.Tag;
 import com.partyhelper.modules.settings.domain.Zone;
 import lombok.RequiredArgsConstructor;
@@ -34,8 +35,8 @@ public class EventService {
         return eventRepository.save(event);
     }
 
-    public void updateEvent(Event event, EventForm eventForm) {
-        modelMapper.map(eventForm, event);
+    public void updateEvent(Event event, EventUpdateForm eventUpdateForm) {
+        modelMapper.map(eventUpdateForm, event);
         event.acceptWaitingList(); // 모집인원을 늘릴 경우, 자동으로 대기 인원을 확정 상태로 변경해야한다.
         eventPublisher.publishEvent(new EventUpdateEvent(event, "해당 파티를 수정했습니다."));
     }

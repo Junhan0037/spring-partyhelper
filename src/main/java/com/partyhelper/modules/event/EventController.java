@@ -7,6 +7,8 @@ import com.partyhelper.modules.account.domain.Account;
 import com.partyhelper.modules.event.domain.Enrollment;
 import com.partyhelper.modules.event.domain.Event;
 import com.partyhelper.modules.event.form.EventForm;
+import com.partyhelper.modules.event.form.EventUpdateForm;
+import com.partyhelper.modules.event.validator.EventUpdateValidator;
 import com.partyhelper.modules.event.validator.EventValidator;
 import com.partyhelper.modules.settings.TagRepository;
 import com.partyhelper.modules.settings.TagService;
@@ -37,6 +39,7 @@ public class EventController {
     private final EventService eventService;
     private final ModelMapper modelMapper;
     private final EventValidator eventValidator;
+    private final EventUpdateValidator eventUpdateValidator;
     private final EventRepository eventRepository;
     private final TagRepository tagRepository;
     private final TagService tagService;
@@ -44,8 +47,13 @@ public class EventController {
     private final ObjectMapper objectMapper;
 
     @InitBinder("eventForm")
-    public void initBinder(WebDataBinder webDataBinder) {
+    public void eventFormBinder(WebDataBinder webDataBinder) {
         webDataBinder.addValidators(eventValidator);
+    }
+
+    @InitBinder("eventUpdateForm")
+    public void eventUpdateBinder(WebDataBinder webDataBinder) {
+        webDataBinder.addValidators(eventUpdateValidator);
     }
 
     @GetMapping("/new-event")
@@ -149,16 +157,15 @@ public class EventController {
         }
         model.addAttribute(event);
         model.addAttribute(account);
-        model.addAttribute(modelMapper.map(event, EventForm.class));
+        model.addAttribute(modelMapper.map(event, EventUpdateForm.class));
         return "event/update-form";
     }
 
     @PostMapping("/event/{path}/edit")
-    public String updateEventSubmit(@CurrentAccount Account account, @PathVariable String path, @Valid EventForm eventForm,
+    public String updateEventSubmit(@CurrentAccount Account account, @PathVariable String path, @Valid EventUpdateForm eventUpdateForm,
                                     Errors errors, Model model) {
         Event event = eventRepository.findByPath(path);
-        eventForm.setEventType(event.getEventType()); // 기존의 모집 방식 유지
-        eventValidator.validateUpdateForm(eventForm, event, errors);
+        eventValidator.validateUpdateForm(eventUpdateForm, event, errors);
 
         if (errors.hasErrors()) {
             model.addAttribute(account);
@@ -166,7 +173,7 @@ public class EventController {
             return "event/update-form";
         }
 
-        eventService.updateEvent(event, eventForm);
+        eventService.updateEvent(event, eventUpdateForm);
         return "redirect:/event/" + event.getEncodedPath();
     }
 
