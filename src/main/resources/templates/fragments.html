@@ -3,6 +3,7 @@
 
 <head th:fragment="head">
     <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>PartyHelper</title>
     <link href="https://fonts.googleapis.com/css?family=Noto+Sans+KR:300,400,500&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="/node_modules/bootstrap/dist/css/bootstrap.min.css" />
@@ -98,10 +99,12 @@
     </style>
 </head>
 
-<nav th:fragment="main-nav" class="navbar navbar-expand-sm navbar-dark bg-dark">
+<nav th:fragment="main-nav" class="navbar navbar-expand-sm navbar-dark bg-primary">
     <a class="navbar-brand" href="/" th:href="@{/}">
         <img src="/images/logo_sm.png" width="30" height="30">
+        PartyHelper
     </a>
+
     <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
         <span class="navbar-toggler-icon"></span>
     </button>
