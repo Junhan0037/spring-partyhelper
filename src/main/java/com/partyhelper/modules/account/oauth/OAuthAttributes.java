@@ -8,6 +8,7 @@ import lombok.Getter;
 
 import java.time.LocalDateTime;
 import java.util.Map;
+import java.util.UUID;
 
 @Getter
 @Builder
@@ -57,6 +58,8 @@ public class OAuthAttributes {
                 .picture(picture)
                 .role(Role.OAUTH)
                 .emailVerified(true)
+                .emailCheckToken(UUID.randomUUID().toString())
+                .emailCheckTokenGeneratedAt(LocalDateTime.now())
                 .eventExistingEnrollmentByWeb(true)
                 .createdDate(LocalDateTime.now())
                 .build();

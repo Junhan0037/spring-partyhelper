@@ -118,16 +118,16 @@ public class AccountController {
         return "redirect:/";
     }
 
-    @GetMapping("/profile/{email}")
-    public String viewProfile(@CurrentAccount Account account, @PathVariable String email, Model model) {
-        Account byEmail = accountRepository.findByEmail(email);
+    @GetMapping("/profile/{emailCheckToken}")
+    public String viewProfile(@CurrentAccount Account account, @PathVariable String emailCheckToken, Model model) {
+        Account byEmail = accountRepository.findByEmailCheckToken(emailCheckToken);
         if (byEmail == null) {
-            throw new IllegalArgumentException(email + "에 해당하는 사용자가 없습니다.");
+            throw new IllegalArgumentException(emailCheckToken + "에 해당하는 사용자가 없습니다.");
         }
 
         model.addAttribute(byEmail);
 //        model.addAttribute("isOwner", byEmail.equals(account));
-        model.addAttribute("isOwner", byEmail.getEmail().equals(account.getEmail()));
+        model.addAttribute("isOwner", byEmail.getEmailCheckToken().equals(account.getEmailCheckToken()));
         return "account/profile";
     }
 

@@ -146,7 +146,7 @@
                     <tr th:each="enroll: ${event.enrollments}">
                         <th scope="row" th:text="${enrollStat.count}"></th>
                         <td>
-                            <a th:href="@{'/profile/' + ${enroll.account.email}}"
+                            <a th:href="@{'/profile/' + ${enroll.account.emailCheckToken}}"
                                class="text-decoration-none">
                                 <svg th:if="${#strings.isEmpty(enroll.account?.profileImage)}" data-jdenticon-value="nickname"
                                      th:data-jdenticon-value="${enroll.account.nickname}" width="24" height="24" class="rounded border bg-light"></svg>
@@ -212,7 +212,7 @@
 
             <dt class="font-weight-light">모임장</dt>
             <dd>
-                <a th:href="@{'/profile/' + ${event.createdBy?.email}}" class="text-decoration-none">
+                <a th:href="@{'/profile/' + ${event.createdBy?.emailCheckToken}}" class="text-decoration-none">
                     <svg th:if="${#strings.isEmpty(event.createdBy?.profileImage)}"
                          th:data-jdenticon-value="${event.createdBy?.nickname}" width="24" height="24" class="rounded border bg-light"></svg>
                     <img th:if="${!#strings.isEmpty(event.createdBy?.profileImage)}"

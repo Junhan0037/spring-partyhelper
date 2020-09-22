@@ -148,7 +148,7 @@
                     <h6 class="dropdown-header">
                         <span th:text="${session.account.getNickname()}"></span>
                     </h6>
-                    <a class="dropdown-item" th:href="@{'/profile/' + ${session.account.getEmail()}}">프로필</a>
+                    <a class="dropdown-item" th:href="@{'/profile/' + ${session.account.getEmailCheckToken()}}">프로필</a>
                     <a class="dropdown-item" >파티</a>
                     <div class="dropdown-divider"></div>
                     <a class="dropdown-item" href="#" th:href="@{'/settings/profile'}">설정</a>
@@ -316,7 +316,10 @@
         $(function () {
             $('.editor').summernote({
                 fontNames: ['Arial', 'Arial Black', 'Comic Sans MS', 'Courier New', 'Noto Sans KR', 'Merriweather'],
-                placeholder: '파티의 일정, 진행 방식 등 자세히 적어 주세요.',
+                placeholder:'예시) <br>' +
+                            '이벤트 장소 : 서울 롯데백화점 강남점 <br>' +
+                            '컨셉 : 전단지 홍보 <br>' +
+                            '대략적인 정보를 적어 주세요.',
                 tabsize: 2,
                 height: 300
             });

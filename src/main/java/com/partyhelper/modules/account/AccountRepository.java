@@ -18,6 +18,8 @@ public interface AccountRepository extends JpaRepository<Account, Long>, Queryds
 
     Account findByEmail(String email);
 
+    Account findByEmailCheckToken(String emailCheckToken);
+
     Account findByNickname(String nickname);
 
     @EntityGraph(attributePaths = {"tags", "zones"})
