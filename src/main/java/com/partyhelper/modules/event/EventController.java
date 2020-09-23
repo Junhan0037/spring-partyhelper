@@ -60,10 +60,10 @@ public class EventController {
     public String newEventForm(@CurrentAccount Account account, Model model) {
         if (!account.isEmailVerified()) {
             model.addAttribute(account);
-            return "/account/check-email";
+            return "account/check-email";
         }
         if (account.getRole().equals(PROVIDER)) {
-            return "/error";
+            return "error";
         }
         model.addAttribute(account);
         model.addAttribute(new EventForm());
@@ -85,7 +85,7 @@ public class EventController {
     public String getEvent(@CurrentAccount Account account, @PathVariable String path, Model model) throws JsonProcessingException {
         if (!account.isEmailVerified()) {
             model.addAttribute(account);
-            return "/account/check-email";
+            return "account/check-email";
         }
         Event event = eventRepository.findByPath(path);
         model.addAttribute(account);
