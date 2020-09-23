@@ -23,6 +23,18 @@
             <div class="row mt-3">
                 <form class="col-sm-6" action="#" th:action="@{/settings/profile}" th:object="${profile}" method="post" novalidate>
                     <div class="form-group">
+                        <label for="phone">전화번호</label>
+                        <input id="phone" type="text" th:field="*{phone}" class="form-control"
+                               placeholder="010-0000-0000" aria-describedby="bioHelp" required>
+                        <small id="phoneHelp" class="form-text text-muted">
+                            업체 확정이 되었을 때, 전송 됩니다.
+                        </small>
+                        <small class="form-text text-danger" th:if="${#fields.hasErrors('bio')}" th:errors="*{bio}">
+                            조금 길어요.
+                        </small>
+                    </div>
+
+                    <div class="form-group">
                         <label for="bio">한 줄 소개</label>
                         <input id="bio" type="text" th:field="*{bio}" class="form-control"
                                placeholder="간략한 소개를 부탁합니다." aria-describedby="bioHelp" required>

@@ -65,6 +65,9 @@ public class EventController {
         if (account.getRole().equals(PROVIDER)) {
             return "error";
         }
+        if (account.getPhone() == null || "".equals(account.getPhone())) {
+            return "error-phone";
+        }
         model.addAttribute(account);
         model.addAttribute(new EventForm());
         return "event/form";

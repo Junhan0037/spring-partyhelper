@@ -69,9 +69,16 @@ public class EnrollmentEventListener {
         context.setVariable("link", "/event/" + event.getEncodedPath());
         context.setVariable("linkName", event.getTitle());
         context.setVariable("message", enrollmentEvent.getMessage());
+        context.setVariable("phone", event.getCreatedBy().getPhone());
+        context.setVariable("email", event.getCreatedBy().getEmail());
         context.setVariable("host", appProperties.getHost());
-        String message = templateEngine.process("mail/simple-link", context);
-
+        String message;
+        if (enrollmentEvent.getMessage().contains("선정")) {
+            message = templateEngine.process("mail/accepted-link", context);
+        } else {
+            message = templateEngine.process("mail/simple-link", context);
+        }
+//        String message = templateEngine.process("mail/accepted-link", context);
         EmailMessage emailMessage = EmailMessage.builder()
                 .subject("PartyHelper, " + event.getTitle() + " 업체 참가 신청 결과입니다.")
                 .to(account.getEmail())
