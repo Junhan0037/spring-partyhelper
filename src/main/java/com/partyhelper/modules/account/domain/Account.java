@@ -5,6 +5,7 @@ import com.partyhelper.modules.main.BaseTimeEntity;
 import com.partyhelper.modules.settings.domain.Tag;
 import com.partyhelper.modules.settings.domain.Zone;
 import lombok.*;
+import org.hibernate.validator.constraints.Length;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
@@ -57,6 +58,8 @@ public class Account extends BaseTimeEntity {
     private String emailCheckToken; // 이메일 토큰
 
     private LocalDateTime emailCheckTokenGeneratedAt;
+
+    private String phone;
 
     private String bio;
 

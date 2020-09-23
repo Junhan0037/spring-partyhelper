@@ -10,6 +10,9 @@
 
     <h2 th:text="${message}">메시지</h2>
 
+    <p>고객 전화번호 : <span th:text="${phone}"></span></p>
+    <p>고객 이메일 : <span th:text="${email}"></span></p>
+    <br>
     <div>
         <a th:href="${host + link}" th:text="${linkName}">Link</a>
         <p>위 링크가 동작하지 않는 경우에는 아래 URL을 웹브라우저에 복사해서 붙여 넣으세요.</p>

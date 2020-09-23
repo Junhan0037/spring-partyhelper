@@ -8,6 +8,9 @@ import org.hibernate.validator.constraints.Length;
 @NoArgsConstructor
 public class Profile {
 
+    @Length(max = 20)
+    private String phone;
+
     @Length(max = 35)
     private String bio;
 
