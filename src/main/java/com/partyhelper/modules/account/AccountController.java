@@ -124,7 +124,7 @@ public class AccountController {
         if (byEmail == null) {
             throw new IllegalArgumentException(emailCheckToken + "에 해당하는 사용자가 없습니다.");
         }
-
+        model.addAttribute("ROLE", byEmail.getRole() == Role.PROVIDER);
         model.addAttribute(byEmail);
 //        model.addAttribute("isOwner", byEmail.equals(account));
         model.addAttribute("isOwner", byEmail.getEmailCheckToken().equals(account.getEmailCheckToken()));

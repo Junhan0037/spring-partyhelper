@@ -61,6 +61,7 @@ public class OAuthAttributes {
                 .emailCheckToken(UUID.randomUUID().toString())
                 .emailCheckTokenGeneratedAt(LocalDateTime.now())
                 .eventExistingEnrollmentByWeb(true)
+                .eventExistingEnrollmentByEmail(true)
                 .createdDate(LocalDateTime.now())
                 .build();
     }

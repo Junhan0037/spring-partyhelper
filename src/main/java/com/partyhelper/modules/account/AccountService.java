@@ -64,6 +64,7 @@ public class AccountService implements UserDetailsService {
         signUpForm.setRole(Role.USER);
         Account account = modelMapper.map(signUpForm, Account.class);
         account.setEventExistingEnrollmentByWeb(true);
+        account.setEventExistingEnrollmentByEmail(true);
         account.setCreatedDate(LocalDateTime.now());
         account.generateEmailCheckToken(); // 이메일 확인 토큰 생성
         return accountRepository.save(account);
@@ -75,6 +76,7 @@ public class AccountService implements UserDetailsService {
         Account account = modelMapper.map(signUpForm, Account.class);
         account.setEventCreatedByWeb(true);
         account.setEventEnrollmentResultByWeb(true);
+        account.setEventEnrollmentResultByEmail(true);
         account.setEventUpdatedByWeb(true);
         account.setCreatedDate(LocalDateTime.now());
         account.generateEmailCheckToken();

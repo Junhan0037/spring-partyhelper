@@ -189,6 +189,9 @@ public class EventController {
 
     @PostMapping("/event/{path}/enroll")
     public String newEnrollment(@CurrentAccount Account account, @PathVariable String path) { // 참가 신청
+        if (account.getPhone() == null || "".equals(account.getPhone())) {
+            return "error-phone";
+        }
         Event event = eventRepository.findByPath(path);
 //        eventService.addMember(event, account);
         eventService.newEnrollment(event, account);
