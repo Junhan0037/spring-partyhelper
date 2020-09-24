@@ -14,6 +14,8 @@
 * Java11
 * Maven
 
+<img src="src/main/resources/static/images/tool.png" width="300px" height="247px" title="툴" alt="capture"></img>
+
 ## 기능
 
 - 폼 로그인, Oauth2 로그인(Google, Naver), 회원가입, 이메일 인증(토큰 확인)
@@ -21,8 +23,6 @@
 - 파티 CRUD, 관리자 확인, 선착순 기능
 - 검색
 - 알림 (웹, 이메일)
-
-<img src="src/main/resources/static/images/tool.png" width="300px" height="247px" title="툴" alt="capture"></img>
 
 ## 구조
 
