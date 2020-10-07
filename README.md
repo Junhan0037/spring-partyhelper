@@ -8,7 +8,10 @@
 ![Bootstrap](https://img.shields.io/badge/Bootstrap-v4.5.0-purple.svg?logo=bootstrap)
 ![Maven](https://img.shields.io/badge/Maven-v4.0.0-ff69b4.svg?logo=apache-maven)
 ![PostgreSQL](https://img.shields.io/badge/PostgreSQL-v1.13.0-blue.svg?logo=postgreSQL)
-
+![MariaDB](https://img.shields.io/badge/MariaDB-003545.svg?logo=MariaDB)
+![Travis_CI](https://img.shields.io/badge/Travis_CI-3EAAAF.svg?logo=Travis-CI)
+![NGINX](https://img.shields.io/badge/NGINX-269539.svg?logo=NGINX)
+![AWS](https://img.shields.io/badge/AWS-232F3E.svg?logo=Amazon-AWS)
 
 고객과 이벤트 업체를 연결해주는 웹 애플리케이션
 (http://www.partyhelper.ml)
