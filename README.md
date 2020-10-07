@@ -1,5 +1,15 @@
 # spring-partyhelper [![Build Status](https://travis-ci.org/Junhan0037/spring-partyhelper.svg?branch=master)](https://travis-ci.org/Junhan0037/spring-partyhelper)
 
+![Java_11](https://img.shields.io/badge/java-v11-red?logo=java)
+![Spring_Boot](https://img.shields.io/badge/Spring_Boot-v2.2.9-green.svg?logo=spring)
+![Spring_Data_JPA](https://img.shields.io/badge/Spring_Data_JPA-v2.2.9-green.svg?logo=spring)
+![Spring_Security](https://img.shields.io/badge/Spring_Security-v2.2.9-green.svg?logo=spring)
+![Thymeleaf](https://img.shields.io/badge/Thymeleaf-v2.2.9-brightgreen.svg?logo=spring)
+![Bootstrap](https://img.shields.io/badge/Bootstrap-v4.5.0-purple.svg?logo=bootstrap)
+![Maven](https://img.shields.io/badge/Maven-v4.0.0-ff69b4.svg?logo=apache-maven)
+![PostgreSQL](https://img.shields.io/badge/PostgreSQL-v1.13.0-blue.svg?logo=postgreSQL)
+
+
 고객과 이벤트 업체를 연결해주는 웹 애플리케이션
 (http://www.partyhelper.ml)
 
@@ -13,6 +23,7 @@
 * SpringBoot 2.2.9
 * Java11
 * Maven
+* 기타
 
 <img src="src/main/resources/static/images/tool.png" width="300px" height="247px" title="툴" alt="capture"></img>
 
