@@ -42,4 +42,4 @@
 
 <img src="src/main/resources/static/images/structure.png" width="1042" height="400px" title="구성" alt="capture"></img><br/>
 
-<img src="src/main/resources/static/images/a.PNG" width="800px" height="400px" title="메인화면" alt="capture"></img><br/>
+<img src="src/main/resources/static/images/result.gif" width="800px" height="400px" title="결과" alt="result"></img><br/>
