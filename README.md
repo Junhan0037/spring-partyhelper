@@ -14,7 +14,6 @@
 ![AWS](https://img.shields.io/badge/AWS-232F3E.svg?logo=Amazon-AWS)
 
 고객과 이벤트 업체를 연결해주는 웹 애플리케이션
-(http://www.partyhelper.ml)
 
 ## 개발환경
 
